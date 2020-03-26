@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <MenuBar fx:id="menuBar" layoutY="1.0" prefHeight="26.0" prefWidth="1000.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Modes">
+            <items>
+              <MenuItem fx:id="scribble" mnemonicParsing="false" onAction="#setModeScribble" text="Scribble" />
+                  <MenuItem fx:id="straightLine" mnemonicParsing="false" onAction="#setModeStraightLine" text="Straight Lines" />
+                  <MenuItem fx:id="rectangle" mnemonicParsing="false" onAction="#setModeRectangle" text="Rectangles" />
+                  <MenuItem fx:id="ellipse" mnemonicParsing="false" onAction="#setModeEllipse" text="Ellipses" />
+                  <MenuItem fx:id="square" mnemonicParsing="false" onAction="#setModeSquare" text="Squares" />
+                  <MenuItem fx:id="circle" mnemonicParsing="false" onAction="#setModeCircle" text="Circles" />
+                  <MenuItem fx:id="polygon" mnemonicParsing="false" onAction="#setModeOpenPolygon" text="Open Polygon" />
+                  <MenuItem fx:id="polygon1" mnemonicParsing="false" onAction="#setModeClosedPolygon" text="Closed Polygon" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Colors">
+            <items>
+              <MenuItem fx:id="black" mnemonicParsing="false" onAction="#setColorBlack" text="Black" />
+                  <MenuItem fx:id="blue" mnemonicParsing="false" onAction="#setColorBlue" text="Blue" />
+                  <MenuItem fx:id="red" mnemonicParsing="false" onAction="#setColorRed" text="Red" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Fill Type">
+              <items>
+                <MenuItem fx:id="fillMenuItem" mnemonicParsing="false" onAction="#setFillYes" text="Fill" />
+                  <MenuItem fx:id="transparentMenuItem" mnemonicParsing="false" onAction="#setFillTransparent" text="Transparent" />
+              </items>
+            </Menu>
+          <Menu mnemonicParsing="false" text="Tools">
+            <items>
+              <MenuItem fx:id="clear" mnemonicParsing="false" onAction="#clearCanvas" text="Clear" />
+                  <MenuItem fx:id="select" mnemonicParsing="false" text="Select" />
+            </items>
+          </Menu>
+            <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+               <items>
+                  <MenuItem fx:id="undo" mnemonicParsing="false" onAction="#undo" text="Undo" />
+                  <MenuItem fx:id="redo" mnemonicParsing="false" onAction="#redo" text="Redo" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Test Functionalities">
+               <items>
+                  <MenuItem fx:id="copyRecent" mnemonicParsing="false" onAction="#copyRecent" text="Copy Recent" />
+               </items>
+            </Menu>
+            <Menu fx:id="selectAndMove" mnemonicParsing="false" text="Select &amp; Move" />
+        </menus>
+      </MenuBar>
+      <Canvas fx:id="drawingCanvas" height="1000.0" layoutY="27.0" onMouseDragged="#drag" onMousePressed="#startDraw" onMouseReleased="#endDraw" width="1000.0" />
+   </children>
+</AnchorPane>
