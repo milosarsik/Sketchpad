@@ -38,7 +38,7 @@ public class Controller {
     public MyLine myLine;
     public MyRectangle myRectangle = new MyRectangle();
     public MyEllipse myEllipse = new MyEllipse();
-
+    public MySquare mySquare = new MySquare();
     public Circle globalCircle = new Circle();
 
 
@@ -243,7 +243,9 @@ public class Controller {
 
 
 
-    // Draw events
+    /*
+    * Start of draw event
+    * */
     @FXML
     void startDraw(MouseEvent event) {
         g = drawingCanvas.getGraphicsContext2D();
@@ -296,8 +298,12 @@ public class Controller {
         else if(mode.equals("square")){
             g.setStroke(cpLine.getValue());
             g.setFill(cpFill.getValue());
-            //globalRectangle.setX(x0);
-            //globalRectangle.setY(y0);
+
+            mySquare = new MySquare();
+            mySquare.setGraphicsContext(g);
+            mySquare.setColor(cpLine);
+            mySquare.setFill(cpFill);
+            mySquare.setStartPoint(event.getX(), event.getY());
         }
         else if(mode.equals("circle")) {
             g.setStroke(cpLine.getValue());
@@ -318,7 +324,9 @@ public class Controller {
 
 
 
-
+    /*
+    * Start of drag event
+    * */
     @FXML
     void drag(MouseEvent event) {
         if(mode.equals("scribble")){
@@ -339,12 +347,9 @@ public class Controller {
             }
         }
     }
-
-
-
-
-
-
+    /*
+    * End of drag event
+    * */
 
 
     @FXML
@@ -388,6 +393,15 @@ public class Controller {
             undoHistory.push(myEllipse);
         }
         else if(mode.equals("square")) {
+            mySquare.setEndPoint(event.getX(), event.getY());
+            mySquare.setWidth();
+            mySquare.setHeight();
+            mySquare.check();
+
+            mySquare.draw();
+
+            undoHistory.push(mySquare);
+
 //            globalRectangle.setWidth(Math.abs(x1 - x0));
 //            globalRectangle.setHeight(Math.abs(y1 - y0));
 //
