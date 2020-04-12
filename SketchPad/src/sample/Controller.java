@@ -1,5 +1,6 @@
 package sample;
 
+import actions.ClearAction;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -10,24 +11,16 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import shapes.*;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
 
 public class Controller {
-    int numDrawn = 0;
-    int movingNum = 0;
-
-    boolean cleared = false;
 
     private String mode, color;
     double x0, y0;
     double x1, y1;
-    ArrayList<Double> polygonX = new ArrayList<Double>();
-    ArrayList<Double> polygonY = new ArrayList<Double>();
 
     public GraphicsContext g;
     public ColorPicker cpLine = new ColorPicker(Color.BLACK);
@@ -39,10 +32,9 @@ public class Controller {
     public MyRectangle myRectangle;
     public MyEllipse myEllipse;
     public MySquare mySquare;
-
     public MyCircle myCircle;
-    public Circle globalCircle = new Circle();
-
+    public MyOpenPolygon myOpenPolygon;
+    public MyClosedPolygon myClosedPolygon;
 
     Stack<MyShape> undoHistory = new Stack<>();
     Stack<MyShape> redoHistory = new Stack<>();
@@ -111,24 +103,7 @@ public class Controller {
     private Canvas drawingCanvas;
 
     @FXML
-    void copyRecent(ActionEvent event) {
-//        Scribble temp = (Scribble) recent.pop();
-//        g.beginPath();
-//        g.lineTo(temp.x0, temp.y0);
-//
-//        double[] tempx = temp.getAllXValues();
-//        double[] tempy = temp.getAllYValues();
-//
-//        for (int i = 0; i < tempx.length; i++){
-//            g.lineTo(tempx[i], tempy[i]);
-//            g.stroke();
-//        }
-//
-//        g.lineTo(temp.x1, temp.y1);
-//        g.stroke();
-//        g.closePath();
-
-    }
+    void copyRecent(ActionEvent event) { }
 
     /*
      * Start of setFill
@@ -149,8 +124,10 @@ public class Controller {
     @FXML
     void setFillTransparent(ActionEvent event){
         cpFill = new ColorPicker(Color.TRANSPARENT);
-
     }
+    /*
+    * End of setFill
+    * */
 
     /*
     * Start of setColor
@@ -246,7 +223,7 @@ public class Controller {
 
 
     /*
-    * Start of draw event
+    * Start of start draw event
     * */
     @FXML
     void startDraw(MouseEvent event) {
@@ -317,18 +294,32 @@ public class Controller {
             myCircle.setFill(cpFill);
             myCircle.setCenterPoint(event.getX(), event.getY());
         }
-        else if(mode.equals("open polygon") || mode.equals("closed polygon")){
+        else if(mode.equals("open polygon")){
             g.setStroke(cpLine.getValue());
             g.setFill(cpFill.getValue());
-            polygonX.add(x0);
-            polygonY.add(y0);
 
+            myOpenPolygon = new MyOpenPolygon();
+
+            myOpenPolygon.setGraphicsContext(g);
+            myOpenPolygon.setColor(cpLine);
+            myOpenPolygon.setFill(cpFill);
+            myOpenPolygon.addPoint(event.getX(), event.getY());
+        }
+        else if(mode.equals("closed polygon")){
+            g.setStroke(cpLine.getValue());
+            g.setFill(cpFill.getValue());
+
+            myClosedPolygon = new MyClosedPolygon();
+
+            myClosedPolygon.setGraphicsContext(g);
+            myClosedPolygon.setColor(cpLine);
+            myClosedPolygon.setFill(cpFill);
+            myClosedPolygon.addPoint(event.getX(), event.getY());
         }
     }
-
-
-
-
+    /*
+    * End of start draw event
+    * */
 
     /*
     * Start of drag event
@@ -341,9 +332,18 @@ public class Controller {
 
             myScribble.addPoint(event.getX(), event.getY());
         }
-        if(mode.equals("open polygon") || mode.equals("closed polygon")){
-            polygonX.add(event.getX());
-            polygonY.add(event.getY());
+        if(mode.equals("open polygon")){
+            myOpenPolygon.addPoint(event.getX(), event.getY());
+
+            try{
+                Thread.sleep(250);
+            }
+            catch (Exception e){
+
+            }
+        }
+        if(mode.equals("closed polygon")){
+            myClosedPolygon.addPoint(event.getX(), event.getY());
 
             try{
                 Thread.sleep(250);
@@ -357,7 +357,9 @@ public class Controller {
     * End of drag event
     * */
 
-
+    /*
+    * Start of end draw event
+    * */
     @FXML
     void endDraw(MouseEvent event) {
         x1 = event.getX();
@@ -417,44 +419,21 @@ public class Controller {
             undoHistory.push(myCircle);
         }
         else if(mode.equals("open polygon")){
-            polygonX.add(x1);
-            polygonY.add(y1);
+            myOpenPolygon.addPoint(event.getX(), event.getY());
+            myOpenPolygon.draw();
 
-            double[] polyX = new double[polygonX.size()];
-            double[] polyY = new double[polygonY.size()];
-
-            for(int i = 0; i < polygonX.size(); i++){
-                polyX[i] = polygonX.get(i);
-                polyY[i] = polygonY.get(i);
-            }
-
-            polygonX.clear();
-            polygonY.clear();
-
-            g.strokePolyline(polyX, polyY, polyX.length);
+            undoHistory.push(myOpenPolygon);
         }
         else if(mode.equals("closed polygon")){
-            polygonX.add(x1);
-            polygonY.add(y1);
+            myClosedPolygon.addPoint(event.getX(), event.getY());
+            myClosedPolygon.draw();
 
-            double[] polyX = new double[polygonX.size()];
-            double[] polyY = new double[polygonY.size()];
-
-            for(int i = 0; i < polygonX.size(); i++){
-                polyX[i] = polygonX.get(i);
-                polyY[i] = polygonY.get(i);
-            }
-
-            polygonX.clear();
-            polygonY.clear();
-
-            g.strokePolygon(polyX, polyY, polyX.length);
-            g.fillPolygon(polyX, polyY, polyX.length);
+            undoHistory.push(myClosedPolygon);
         }
     }
-
-
-
+    /*
+    * End of end draw event
+    * */
 
     /*
     * Start of undo
@@ -494,6 +473,26 @@ public class Controller {
                 {
                     MyEllipse tempEllipse = (MyEllipse) tempShape;
                     tempEllipse.draw();
+                }
+                else if(tempShape.getClass() == MySquare.class)
+                {
+                    MySquare tempSquare = (MySquare) tempShape;
+                    tempSquare.draw();
+                }
+                else if(tempShape.getClass() == MyCircle.class)
+                {
+                    MyCircle tempCircle = (MyCircle) tempShape;
+                    tempCircle.draw();
+                }
+                else if(tempShape.getClass() == MyClosedPolygon.class)
+                {
+                    MyClosedPolygon tempClosePolygon = (MyClosedPolygon) tempShape;
+                    tempClosePolygon.draw();
+                }
+                else if(tempShape.getClass() == MyOpenPolygon.class)
+                {
+                    MyOpenPolygon tempOpenPolygon = (MyOpenPolygon) tempShape;
+                    tempOpenPolygon.draw();
                 }
             }
         }
@@ -539,6 +538,26 @@ public class Controller {
                 {
                     MyEllipse tempEllipse = (MyEllipse) tempShape;
                     tempEllipse.draw();
+                }
+                else if(tempShape.getClass() == MySquare.class)
+                {
+                    MySquare tempSquare = (MySquare) tempShape;
+                    tempSquare.draw();
+                }
+                else if(tempShape.getClass() == MyCircle.class)
+                {
+                    MyCircle tempCircle = (MyCircle) tempShape;
+                    tempCircle.draw();
+                }
+                else if(tempShape.getClass() == MyClosedPolygon.class)
+                {
+                    MyClosedPolygon tempClosePolygon = (MyClosedPolygon) tempShape;
+                    tempClosePolygon.draw();
+                }
+                else if(tempShape.getClass() == MyOpenPolygon.class)
+                {
+                    MyOpenPolygon tempOpenPolygon = (MyOpenPolygon) tempShape;
+                    tempOpenPolygon.draw();
                 }
             }
         }
