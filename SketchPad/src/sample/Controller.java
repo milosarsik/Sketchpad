@@ -36,9 +36,11 @@ public class Controller {
 
     public MyScribble myScribble;
     public MyLine myLine;
-    public MyRectangle myRectangle = new MyRectangle();
-    public MyEllipse myEllipse = new MyEllipse();
-    public MySquare mySquare = new MySquare();
+    public MyRectangle myRectangle;
+    public MyEllipse myEllipse;
+    public MySquare mySquare;
+
+    public MyCircle myCircle;
     public Circle globalCircle = new Circle();
 
 
@@ -308,8 +310,12 @@ public class Controller {
         else if(mode.equals("circle")) {
             g.setStroke(cpLine.getValue());
             g.setFill(cpFill.getValue());
-            globalCircle.setCenterX(x0);
-            globalCircle.setCenterY(y0);
+
+            myCircle = new MyCircle();
+            myCircle.setGraphicsContext(g);
+            myCircle.setColor(cpLine);
+            myCircle.setFill(cpFill);
+            myCircle.setCenterPoint(event.getX(), event.getY());
         }
         else if(mode.equals("open polygon") || mode.equals("closed polygon")){
             g.setStroke(cpLine.getValue());
@@ -363,14 +369,13 @@ public class Controller {
 
             myScribble.setEndPoint(event.getX(), event.getY());
 
-            // Add to stack
             undoHistory.push(myScribble);
         }
         else if(mode.equals("straight line")){
             myLine.setEndPoint(event.getX(), event.getY());
+
             myLine.draw();
 
-            // Add to stack
             undoHistory.push(myLine);
         }
         else if(mode.equals("rectangle")){
@@ -401,32 +406,15 @@ public class Controller {
             mySquare.draw();
 
             undoHistory.push(mySquare);
-
-//            globalRectangle.setWidth(Math.abs(x1 - x0));
-//            globalRectangle.setHeight(Math.abs(y1 - y0));
-//
-//            if (x0 > x1) {
-//                globalRectangle.setX(x1);
-//            }
-//            if (y0 > y1) {
-//                globalRectangle.setY(y1);
-//            }
-//
-//            g.fillRect(globalRectangle.getX(), globalRectangle.getY(), globalRectangle.getWidth(), globalRectangle.getWidth());
-//            g.strokeRect(globalRectangle.getX(), globalRectangle.getY(), globalRectangle.getWidth(), globalRectangle.getWidth());
         }
         else if(mode.equals("circle")) {
-            globalCircle.setRadius((Math.abs(x1 - x0) + Math.abs(y1 - y0)) / 2);
+            myCircle.setEndPoint(event.getX(), event.getY());
+            myCircle.setRadius();
+            myCircle.check();
 
-            if(x0 > x1) {
-                globalCircle.setCenterX(x1);
-            }
-            if(y0 > y1) {
-                globalCircle.setCenterY(y1);
-            }
+            myCircle.draw();
 
-            g.fillOval(globalCircle.getCenterX(), globalCircle.getCenterY(), globalCircle.getRadius(), globalCircle.getRadius());
-            g.strokeOval(globalCircle.getCenterX(), globalCircle.getCenterY(), globalCircle.getRadius(), globalCircle.getRadius());
+            undoHistory.push(myCircle);
         }
         else if(mode.equals("open polygon")){
             polygonX.add(x1);
@@ -465,6 +453,12 @@ public class Controller {
         }
     }
 
+
+
+
+    /*
+    * Start of undo
+    * */
     @FXML
     void undo(ActionEvent event) {
 
@@ -504,7 +498,13 @@ public class Controller {
             }
         }
     }
+    /*
+    * End of undo
+    * */
 
+    /*
+    * Start of redo
+    * */
     @FXML
     void redo(ActionEvent event) {
         if(!redoHistory.empty()){
@@ -543,25 +543,7 @@ public class Controller {
             }
         }
     }
+    /*
+    * End of redo
+    * */
 }
-
-//        if(mode.equals("move")){
-//            Scribble temp = (Scribble) allDrawn.get(movingNum - 1);
-//            temp.move(x0, x1);
-//            allDrawn.set(movingNum - 1, temp);
-//
-//            g.beginPath();
-//            g.lineTo(temp.x0, temp.y0);
-//
-//            double[] tempx = temp.getAllXValues();
-//            double[] tempy = temp.getAllYValues();
-//
-//            for (int i = 0; i < tempx.length; i++){
-//                g.lineTo(tempx[i], tempy[i]);
-//                g.stroke();
-//            }
-//
-//            g.lineTo(temp.x1, temp.y1);
-//            g.stroke();
-//            g.closePath();
-//        }
