@@ -1,6 +1,7 @@
 package shapes;
 
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 
@@ -20,6 +21,16 @@ public class MyScribble extends MyShape {
 
     public void myScribble(GraphicsContext graphicsContext){
         this.graphicsContext = graphicsContext;
+    }
+
+    public boolean containsPoint(Point2D point){
+        for(int i = 0; i < xValues.size(); i++){
+            if(xValues.get(i) == point.getX() && yValues.get(i) == point.getY()){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void setStartPoint(double startX, double startY){

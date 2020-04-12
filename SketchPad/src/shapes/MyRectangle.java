@@ -1,5 +1,6 @@
 package shapes;
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.shape.Rectangle;
@@ -15,6 +16,10 @@ public class MyRectangle extends MyShape{
     private ColorPicker cpFill;
 
     public void MyRectangle(){
+    }
+
+    public boolean containsPoint(Point2D point){
+        return rectangle.contains(point);
     }
 
     public void setStartPoint(double startX, double startY){

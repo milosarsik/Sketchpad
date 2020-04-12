@@ -1,5 +1,6 @@
 package shapes;
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.shape.Line;
@@ -15,6 +16,10 @@ public class MyLine extends MyShape {
 
     public void myLine(GraphicsContext graphicsContext){
         this.graphicsContext = graphicsContext;
+    }
+
+    public boolean containsPoint(Point2D point){
+        return line.contains(point);
     }
 
     public void setStartPoint(double x, double y){

@@ -1,5 +1,6 @@
 package shapes;
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 
@@ -13,6 +14,17 @@ public class MyClosedPolygon extends MyShape {
     private GraphicsContext graphicsContext;
     ColorPicker cpLine;
     ColorPicker cpFill;
+
+    // This wont really work for a polygon unless you click the edges
+    public boolean containsPoint(Point2D point){
+        for(int i = 0; i < polygonX.size(); i++){
+            if(polygonX.get(i) == point.getX() && polygonY.get(i) == point.getY()){
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public void addPoint(double x, double y){
         polygonX.add(x);

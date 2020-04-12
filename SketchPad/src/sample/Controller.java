@@ -19,13 +19,10 @@ import java.util.Stack;
 public class Controller {
 
     private String mode, color;
-    double x0, y0;
-    double x1, y1;
 
     public GraphicsContext g;
     public ColorPicker cpLine = new ColorPicker(Color.BLACK);
     public ColorPicker cpFill = new ColorPicker(Color.BLACK);
-
 
     public MyScribble myScribble;
     public MyLine myLine;
@@ -216,6 +213,12 @@ public class Controller {
         undoHistory.push(new ClearAction());
     }
 
+    @FXML
+    void delete(){
+        
+
+    }
+
 
 
 
@@ -229,8 +232,6 @@ public class Controller {
     void startDraw(MouseEvent event) {
         g = drawingCanvas.getGraphicsContext2D();
         g.setStroke(cpLine.getValue());
-        x0 = event.getX();
-        y0 = event.getY();
 
         if(mode.equals("scribble")){
             g.setStroke(cpLine.getValue());
@@ -362,8 +363,6 @@ public class Controller {
     * */
     @FXML
     void endDraw(MouseEvent event) {
-        x1 = event.getX();
-        y1 = event.getY();
 
         if(mode.equals("scribble")){
             g.lineTo(event.getX(), event.getY());

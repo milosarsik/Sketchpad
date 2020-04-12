@@ -1,5 +1,6 @@
 package shapes;
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.shape.Ellipse;
@@ -14,6 +15,10 @@ public class MyEllipse extends MyShape {
     private GraphicsContext graphicsContext;
     ColorPicker cpLine;
     ColorPicker cpFill;
+
+    public boolean containsPoint(Point2D point){
+        return ellipse.contains(point);
+    }
 
     public void setCenterPoint(double centerX, double centerY){
         this.centerX = centerX;
