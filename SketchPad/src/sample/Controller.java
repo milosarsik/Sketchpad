@@ -1,8 +1,10 @@
 package sample;
 
 import actions.ClearAction;
+import actions.DeleteAction;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
@@ -13,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import shapes.*;
 
+import javax.swing.*;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -35,6 +38,8 @@ public class Controller {
 
     Stack<MyShape> undoHistory = new Stack<>();
     Stack<MyShape> redoHistory = new Stack<>();
+
+    Point2D deletePoint;
 
     @FXML
     private MenuBar menuBar;
@@ -198,6 +203,11 @@ public class Controller {
     void setModeCircle(ActionEvent event) {
         mode = "circle";
     }
+
+    @FXML
+    void setModeDelete(ActionEvent event){
+        mode = "delete";
+    }
     /*
     * End of setMode
     * */
@@ -212,17 +222,6 @@ public class Controller {
 
         undoHistory.push(new ClearAction());
     }
-
-    @FXML
-    void delete(){
-        
-
-    }
-
-
-
-
-
 
 
     /*
@@ -316,6 +315,9 @@ public class Controller {
             myClosedPolygon.setColor(cpLine);
             myClosedPolygon.setFill(cpFill);
             myClosedPolygon.addPoint(event.getX(), event.getY());
+        }
+        else if(mode.equals("delete")){
+            deletePoint = new Point2D(event.getX(), event.getY());
         }
     }
     /*
@@ -428,6 +430,9 @@ public class Controller {
             myClosedPolygon.draw();
 
             undoHistory.push(myClosedPolygon);
+        }
+        else if(mode.equals("delete")){
+            delete(deletePoint);
         }
     }
     /*
@@ -564,4 +569,103 @@ public class Controller {
     /*
     * End of redo
     * */
+
+    /*
+     * Start of delete
+     *
+     * Bug: Undo and redo do not work with delete, you cannot undo or redo a delete action for now
+     * */
+    public void delete(Point2D point){
+        Stack<MyShape> tempUndo = new Stack<>();
+
+        // Create a copy stack of undoHistory
+        Iterator<MyShape> undoHistoryIterator = undoHistory.iterator();
+        while(undoHistoryIterator.hasNext()){
+            tempUndo.push(undoHistoryIterator.next());
+        }
+
+        // Iterate through copy stack to find the shape, and push it on redo stack to save
+        while(!tempUndo.isEmpty()){
+            MyShape tempShape = tempUndo.pop();
+
+            if(tempShape.containsPoint(point)) {
+                redoHistory.push(tempShape);
+
+                // Iterate through undoHistory stack and remove the deleted shape
+                Iterator<MyShape> removalIterator = undoHistory.iterator();
+                while(removalIterator.hasNext()){
+                    if(removalIterator.next() == redoHistory.peek()){
+                        removalIterator.remove();
+                        break;
+                    }
+                    else{
+                        continue;
+                    }
+                }
+
+                // Redraw the new canvas without the shape we just deleted
+                g.clearRect(0, 0, drawingCanvas.getWidth(), drawingCanvas.getHeight());
+
+                Stack<MyShape> drawStack = new Stack<>();
+
+                Iterator iterator = undoHistory.iterator();
+                while(iterator.hasNext()){
+                    drawStack.push((MyShape) iterator.next());
+                }
+
+                while(!drawStack.isEmpty()){
+                    tempShape = drawStack.pop();
+
+                    if(tempShape.getClass() == MyScribble.class){
+                        MyScribble tempScribble = (MyScribble) tempShape;
+                        tempScribble.draw();
+                    }
+                    else if(tempShape.getClass() == MyLine.class){
+                        MyLine tempLine = (MyLine) tempShape;
+                        tempLine.draw();
+                    }
+                    else if(tempShape.getClass() == MyRectangle.class){
+                        MyRectangle tempRectangle = (MyRectangle) tempShape;
+                        tempRectangle.draw();
+                    }
+                    else if(tempShape.getClass() == MyEllipse.class)
+                    {
+                        MyEllipse tempEllipse = (MyEllipse) tempShape;
+                        tempEllipse.draw();
+                    }
+                    else if(tempShape.getClass() == MySquare.class)
+                    {
+                        MySquare tempSquare = (MySquare) tempShape;
+                        tempSquare.draw();
+                    }
+                    else if(tempShape.getClass() == MyCircle.class)
+                    {
+                        MyCircle tempCircle = (MyCircle) tempShape;
+                        tempCircle.draw();
+                    }
+                    else if(tempShape.getClass() == MyClosedPolygon.class)
+                    {
+                        MyClosedPolygon tempClosePolygon = (MyClosedPolygon) tempShape;
+                        tempClosePolygon.draw();
+                    }
+                    else if(tempShape.getClass() == MyOpenPolygon.class)
+                    {
+                        MyOpenPolygon tempOpenPolygon = (MyOpenPolygon) tempShape;
+                        tempOpenPolygon.draw();
+                    }
+                }
+
+                redoHistory.pop();
+
+                break;
+            }
+            else{
+                continue;
+            }
+        }
+
+    }
+    /*
+     * End of delete
+     * */
 }

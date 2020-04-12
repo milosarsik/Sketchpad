@@ -38,7 +38,7 @@
           <Menu mnemonicParsing="false" text="Tools">
             <items>
               <MenuItem fx:id="clear" mnemonicParsing="false" onAction="#clearCanvas" text="Clear" />
-                  <MenuItem fx:id="select" mnemonicParsing="false" text="Select" />
+                  <MenuItem fx:id="deleteMenuItem" mnemonicParsing="false" onAction="#setModeDelete" text="Delete" />
             </items>
           </Menu>
             <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
@@ -52,7 +52,6 @@
                   <MenuItem fx:id="copyRecent" mnemonicParsing="false" onAction="#copyRecent" text="Copy Recent" />
                </items>
             </Menu>
-            <Menu fx:id="selectAndMove" mnemonicParsing="false" text="Select &amp; Move" />
         </menus>
       </MenuBar>
       <Canvas fx:id="drawingCanvas" height="1000.0" layoutY="27.0" onMouseDragged="#drag" onMousePressed="#startDraw" onMouseReleased="#endDraw" width="1000.0" />
