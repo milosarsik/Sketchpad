@@ -1,21 +1,16 @@
 package sample;
 
 import actions.ClearAction;
-import actions.DeleteAction;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import shapes.*;
 
-import javax.swing.*;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -36,10 +31,16 @@ public class Controller {
     public MyOpenPolygon myOpenPolygon;
     public MyClosedPolygon myClosedPolygon;
 
+    public MyRectangle pasteRectangle;
+
     Stack<MyShape> undoHistory = new Stack<>();
     Stack<MyShape> redoHistory = new Stack<>();
 
     Point2D deletePoint;
+    Point2D copyPoint;
+    Point2D pastePoint;
+
+    MyShape copiedShape;
 
     @FXML
     private MenuBar menuBar;
@@ -87,7 +88,7 @@ public class Controller {
     private MenuItem select1;
 
     @FXML
-    private MenuItem copyRecent;
+    private MenuItem gettingStartedMenuItem;
 
     @FXML
     private Menu selectAndMove;
@@ -104,8 +105,49 @@ public class Controller {
     @FXML
     private Canvas drawingCanvas;
 
+    /*
+    * Open getting started information page
+    * */
     @FXML
-    void copyRecent(ActionEvent event) { }
+    void openGettingStarted(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Getting Started");
+        alert.setHeaderText("Welcome to Paint It!");
+
+        alert.setContentText("This tutorial page will run you through how to use the Paint It! application. \n" +
+                "\n The program contains the following modes: \n" +
+                "- Scribble/Freehand Lines \n" +
+                "- Straight Lines \n" +
+                "- Rectangles \n" +
+                "- Ellipses \n" +
+                "- Squares \n" +
+                "- Circles \n" +
+                "- Open Polygons \n" +
+                "- Closed Polygons \n" +
+                "\n" +
+                "Alongside offering a wide range of shapes to draw, " +
+                "Paint It! gives you the option to choose a color for each " +
+                "individual shape that you draw. \n" +
+                "\n" +
+                "The program contains the following colors: \n" +
+                "- Black \n" +
+                "- Blue \n" +
+                "- Red \n" +
+                "\n" +
+                "The program contains other functions such as: \n" +
+                "- Delete \n" +
+                "\n" +
+                "");
+
+        // show the dialog
+        alert.show();
+
+    }
+
+    @FXML
+    void setModeCopy(ActionEvent event) {
+        mode = "copy";
+    }
 
     /*
      * Start of setFill
@@ -319,6 +361,9 @@ public class Controller {
         else if(mode.equals("delete")){
             deletePoint = new Point2D(event.getX(), event.getY());
         }
+        else if(mode.equals("copy")){
+            copyPoint = new Point2D(event.getX(), event.getY());
+        }
     }
     /*
     * End of start draw event
@@ -434,6 +479,53 @@ public class Controller {
         else if(mode.equals("delete")){
             delete(deletePoint);
         }
+        else if(mode.equals("copy")) {
+            pastePoint = new Point2D(event.getX(), event.getY());
+
+            Stack<MyShape> tempUndo = new Stack<>();
+
+            // Create a copy stack of undoHistory
+            Iterator<MyShape> undoHistoryIterator = undoHistory.iterator();
+            while (undoHistoryIterator.hasNext()) {
+                tempUndo.push(undoHistoryIterator.next());
+            }
+
+            // Iterate through copy stack to find the shape, and save it
+            while (!tempUndo.isEmpty()) {
+                MyShape tempShape = tempUndo.pop();
+
+                if (tempShape.containsPoint(copyPoint)) {
+
+                    if(tempShape.getClass() == MyRectangle.class){
+                        MyRectangle tempRectangle = (MyRectangle) tempShape;
+
+                        g.setStroke(tempRectangle.getStroke().getValue());
+                        g.setFill(tempRectangle.getFill().getValue());
+
+                        pasteRectangle = new MyRectangle();
+
+                        pasteRectangle.setGraphicsContext(g);
+                        pasteRectangle.setColor(cpLine);
+                        pasteRectangle.setFill(cpFill);
+
+                        pasteRectangle.setStartPoint(pastePoint.getX(), pastePoint.getY());
+                        pasteRectangle.setEndPoint(pastePoint.getX() + tempRectangle.getWidth(), pastePoint.getY() + tempRectangle.getHeight());
+                        pasteRectangle.setWidth();
+                        pasteRectangle.setHeight();
+                        //pasteRectangle.check();
+                        pasteRectangle.draw();
+
+
+                        undoHistory.push(pasteRectangle);
+                    }
+                }
+                else{
+                    continue;
+                }
+            }
+
+        }
+
     }
     /*
     * End of end draw event
@@ -573,7 +665,8 @@ public class Controller {
     /*
      * Start of delete
      *
-     * Bug: Undo and redo do not work with delete, you cannot undo or redo a delete action for now
+     * Bug #1: Undo and redo do not work with delete, you cannot undo or redo a delete action for now
+     * Bug #2: Redraw after object delete may mess up the order in which they were drawn
      * */
     public void delete(Point2D point){
         Stack<MyShape> tempUndo = new Stack<>();
@@ -663,7 +756,6 @@ public class Controller {
                 continue;
             }
         }
-
     }
     /*
      * End of delete

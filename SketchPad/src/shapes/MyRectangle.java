@@ -8,6 +8,7 @@ import javafx.scene.shape.Rectangle;
 public class MyRectangle extends MyShape{
     public double startX, startY;
     public double endX, endY;
+    public double width, height;
 
     Rectangle rectangle = new Rectangle();
 
@@ -16,6 +17,13 @@ public class MyRectangle extends MyShape{
     private ColorPicker cpFill;
 
     public void MyRectangle(){
+    }
+
+    public ColorPicker getStroke(){
+        return cpLine;
+    }
+    public ColorPicker getFill(){
+        return cpFill;
     }
 
     public boolean containsPoint(Point2D point){
@@ -44,10 +52,14 @@ public class MyRectangle extends MyShape{
     }
 
     public void setWidth(){
+        this.width = Math.abs((endX - startX));
+
         rectangle.setWidth(Math.abs((endX - startX)));
     }
 
     public void setHeight(){
+        this.height = Math.abs((endY - startY));
+
         rectangle.setHeight(Math.abs((endY - startY)));
     }
 
@@ -78,6 +90,18 @@ public class MyRectangle extends MyShape{
 
     public void setGraphicsContext(GraphicsContext graphicsContext){
         this.graphicsContext = graphicsContext;
+    }
+
+    public void translate(Point2D newStartPoint){
+        setStartPoint(newStartPoint.getX(), newStartPoint.getY());
+        setEndPoint(newStartPoint.getX() + width, newStartPoint.getY() + height);
+        setWidth();
+        setHeight();
+        //check();
+
+        draw();
+
+
     }
 
     public void draw(){

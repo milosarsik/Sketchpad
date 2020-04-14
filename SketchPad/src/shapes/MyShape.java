@@ -8,4 +8,6 @@ public class MyShape {
     public boolean containsPoint(Point2D point){
         return false;
     }
+
+    public void translate(){}
 }

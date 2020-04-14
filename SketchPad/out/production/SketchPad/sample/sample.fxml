@@ -37,8 +37,9 @@
             </Menu>
           <Menu mnemonicParsing="false" text="Tools">
             <items>
-              <MenuItem fx:id="clear" mnemonicParsing="false" onAction="#clearCanvas" text="Clear" />
                   <MenuItem fx:id="deleteMenuItem" mnemonicParsing="false" onAction="#setModeDelete" text="Delete" />
+                  <MenuItem fx:id="copyMenuItem" mnemonicParsing="false" onAction="#setModeCopy" text="Copy" />
+              <MenuItem fx:id="clear" mnemonicParsing="false" onAction="#clearCanvas" text="Clear" />
             </items>
           </Menu>
             <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
@@ -47,9 +48,9 @@
                   <MenuItem fx:id="redo" mnemonicParsing="false" onAction="#redo" text="Redo" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Test Functionalities">
+            <Menu mnemonicParsing="false" text="Help">
                <items>
-                  <MenuItem fx:id="copyRecent" mnemonicParsing="false" onAction="#copyRecent" text="Copy Recent" />
+                  <MenuItem fx:id="gettingStartedMenuItem" mnemonicParsing="false" onAction="#openGettingStarted" text="Getting Started" />
                </items>
             </Menu>
         </menus>
