@@ -18,6 +18,9 @@ public class MyLine extends MyShape {
         this.graphicsContext = graphicsContext;
     }
 
+    public ColorPicker getStroke(){
+        return cpLine;
+    }
     public boolean containsPoint(Point2D point){
         return line.contains(point);
     }
@@ -55,6 +58,7 @@ public class MyLine extends MyShape {
     public void setColor(ColorPicker colorPicker){
         cpLine = colorPicker;
     }
+
 
     public void draw() {
         graphicsContext.setStroke(cpLine.getValue());

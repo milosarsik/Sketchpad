@@ -1,6 +1,5 @@
 package shapes;
 
-
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
@@ -48,6 +47,10 @@ public class MyScribble extends MyShape {
         yValues.add(y);
     }
 
+    public ColorPicker getStroke(){
+        return cpLine;
+    }
+
     public double getStartX(){
         return startX;
     }
@@ -83,25 +86,6 @@ public class MyScribble extends MyShape {
         return yVals;
     }
 
-//    public void move(double newX, double newY){
-//        double xdifference = newX - x0;
-//        double ydifference = newY - y0;
-//
-//        this.x0 = newX;
-//        this.y0 = newY;
-//
-//        for (int i=0; i < xValues.size(); i++){
-//            xValues.set(i, xValues.get(i) + xdifference);
-//        }
-//        for (int i=0; i < yValues.size(); i++){
-//            yValues.set(i, yValues.get(i) + ydifference);
-//        }
-//
-//        this.x1 = x1 + xdifference;
-//        this.y1 = y1 + ydifference;
-//
-//    }
-
     public void setGraphicsContext(GraphicsContext graphicsContext){
         this.graphicsContext = graphicsContext;
     }
@@ -123,7 +107,7 @@ public class MyScribble extends MyShape {
         graphicsContext.lineTo(getEndX(), getEndY());
         graphicsContext.stroke();
 
-        //g.closePath();
+        graphicsContext.closePath();
 
     }
 }

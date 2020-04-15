@@ -43,6 +43,22 @@ public class MyClosedPolygon extends MyShape {
         this.graphicsContext = graphicsContext;
     }
 
+    public ArrayList<Double> getAllXValues(){
+        return polygonX;
+    }
+
+    public ArrayList<Double> getAllYValues(){
+        return polygonY;
+    }
+
+    public ColorPicker getStroke(){
+        return cpLine;
+    }
+    public ColorPicker getFill(){
+        return cpFill;
+    }
+
+
     public void draw(){
         graphicsContext.setStroke(cpLine.getValue());
         graphicsContext.setFill(cpFill.getValue());

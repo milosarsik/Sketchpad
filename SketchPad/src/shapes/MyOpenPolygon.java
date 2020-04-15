@@ -15,6 +15,14 @@ public class MyOpenPolygon extends MyShape{
     ColorPicker cpLine;
     ColorPicker cpFill;
 
+    public ArrayList<Double> getAllXValues(){
+        return polygonX;
+    }
+
+    public ArrayList<Double> getAllYValues(){
+        return polygonY;
+    }
+
     // This wont really work for a polygon unless you click the edges
     public boolean containsPoint(Point2D point){
         for(int i = 0; i < polygonX.size(); i++){
@@ -29,6 +37,12 @@ public class MyOpenPolygon extends MyShape{
     public void addPoint(double x, double y){
         polygonX.add(x);
         polygonY.add(y);
+    }
+    public ColorPicker getStroke(){
+        return cpLine;
+    }
+    public ColorPicker getFill(){
+        return cpFill;
     }
 
     public void setColor(ColorPicker colorPicker){

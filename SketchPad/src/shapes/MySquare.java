@@ -18,6 +18,13 @@ public class MySquare extends MyShape {
     public void MySquare(){
     }
 
+    public ColorPicker getStroke(){
+        return cpLine;
+    }
+    public ColorPicker getFill(){
+        return cpFill;
+    }
+
     public boolean containsPoint(Point2D point){
         return square.contains(point);
     }

@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import shapes.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -31,7 +32,14 @@ public class Controller {
     public MyOpenPolygon myOpenPolygon;
     public MyClosedPolygon myClosedPolygon;
 
+    public MyScribble pasteScribble;
     public MyRectangle pasteRectangle;
+    public MyLine pasteLine;
+    public MyEllipse pasteEllipse;
+    public MySquare pasteSquare;
+    public MyCircle pasteCircle;
+    public MyOpenPolygon pasteOpenPolygon;
+    public MyClosedPolygon pasteClosedPolygon;
 
     Stack<MyShape> undoHistory = new Stack<>();
     Stack<MyShape> redoHistory = new Stack<>();
@@ -496,17 +504,71 @@ public class Controller {
 
                 if (tempShape.containsPoint(copyPoint)) {
 
-                    if(tempShape.getClass() == MyRectangle.class){
-                        MyRectangle tempRectangle = (MyRectangle) tempShape;
+                    if(tempShape.getClass() == MyScribble.class){
 
-                        g.setStroke(tempRectangle.getStroke().getValue());
-                        g.setFill(tempRectangle.getFill().getValue());
+                        System.out.println("Copying a scribble...");
+
+                        MyScribble tempScribble = (MyScribble) tempShape;
+
+                        g.setStroke(tempScribble.getStroke().getValue());
+
+                        pasteScribble = new MyScribble();
+
+                        pasteScribble.setGraphicsContext(g);
+                        pasteScribble.setColor(cpLine);
+
+                        pasteScribble.setStartPoint(pastePoint.getX(), pastePoint.getY());
+
+                        double [] oldX = tempScribble.getAllXValues();
+                        double [] oldY = tempScribble.getAllYValues();
+
+                        double xDifference = pastePoint.getX() - tempScribble.getStartX();
+                        double yDifference = pastePoint.getY() - tempScribble.getStartY();
+
+                        for(int i = 0; i < oldX.length; i++){
+                            pasteScribble.addPoint(oldX[i] + xDifference, oldY[i] + yDifference);
+                        }
+
+                        pasteScribble.setEndPoint(tempScribble.getEndX() + xDifference, tempScribble.getEndY() + yDifference);
+
+                        pasteScribble.draw();
+
+                        undoHistory.add(pasteScribble);
+                    }
+                    else if(tempShape.getClass() == MyLine.class){
+                        System.out.println("Copying a line...");
+
+
+                        MyLine tempLine = (MyLine) tempShape;
+
+                        g.setStroke(tempLine.getStroke().getValue());
+
+                        pasteLine = new MyLine();
+
+                        pasteLine.setGraphicsContext(g);
+                        pasteLine.setColor(tempLine.getStroke());
+
+                        double xDifference = pastePoint.getX() - tempLine.getStartX();
+                        double yDifference = pastePoint.getY() - tempLine.getStartY();
+
+                        pasteLine.setStartPoint(pastePoint.getX(), pastePoint.getY());
+                        pasteLine.setEndPoint(tempLine.getEndX() + xDifference, tempLine.getEndY() + yDifference);
+
+                        pasteLine.draw();
+
+                        undoHistory.add(pasteLine);
+
+                    }
+                    else if(tempShape.getClass() == MyRectangle.class){
+                        System.out.println("Copying a rectangle...");
+//COLOR WORKS HERE
+                        MyRectangle tempRectangle = (MyRectangle) tempShape;
 
                         pasteRectangle = new MyRectangle();
 
                         pasteRectangle.setGraphicsContext(g);
-                        pasteRectangle.setColor(cpLine);
-                        pasteRectangle.setFill(cpFill);
+                        pasteRectangle.setColor(tempRectangle.getStroke());
+                        pasteRectangle.setFill(tempRectangle.getFill());
 
                         pasteRectangle.setStartPoint(pastePoint.getX(), pastePoint.getY());
                         pasteRectangle.setEndPoint(pastePoint.getX() + tempRectangle.getWidth(), pastePoint.getY() + tempRectangle.getHeight());
@@ -515,9 +577,124 @@ public class Controller {
                         //pasteRectangle.check();
                         pasteRectangle.draw();
 
-
                         undoHistory.push(pasteRectangle);
                     }
+                    else if(tempShape.getClass() == MyEllipse.class){
+                        MyEllipse tempEllipse = (MyEllipse) tempShape;
+
+                        g.setStroke(tempEllipse.getStroke().getValue());
+                        g.setFill(tempEllipse.getFill().getValue());
+
+                        pasteEllipse = new MyEllipse();
+
+                        pasteEllipse.setGraphicsContext(g);
+                        pasteEllipse.setColor(cpLine);
+                        pasteEllipse.setFill(cpFill);
+                        pasteEllipse.setCenterPoint(pastePoint.getX(), pastePoint.getY());
+                        pasteEllipse.setEndPoint(pasteEllipse.getCenterX() + tempEllipse.getRadiusX(), pasteEllipse.getCenterY() + tempEllipse.getRadiusY());
+                        pasteEllipse.setRadius();
+                        //pasteEllipse.check();
+                        pasteEllipse.draw();
+
+                        undoHistory.push(pasteEllipse);
+                    }
+                    else if(tempShape.getClass() == MySquare.class){
+                        System.out.println("Copying a square...");
+//COLOR WORKS HERE
+                        MySquare tempSquare = (MySquare) tempShape;
+
+                        pasteSquare = new MySquare();
+
+                        pasteSquare.setGraphicsContext(g);
+                        pasteSquare.setColor(tempSquare.getStroke());
+                        pasteSquare.setFill(tempSquare.getFill());
+
+                        pasteSquare.setStartPoint(pastePoint.getX(), pastePoint.getY());
+                        pasteSquare.setEndPoint(pastePoint.getX() + tempSquare.getWidth(), pastePoint.getY() + tempSquare.getHeight());
+                        pasteSquare.setWidth();
+                        pasteSquare.setHeight();
+                        //pasteRectangle.check();
+                        pasteSquare.draw();
+
+                        undoHistory.push(pasteSquare);
+                    }
+                    else if(tempShape.getClass() == MyCircle.class){
+                        System.out.println("Copying a circle...");
+
+                        MyCircle tempCircle = (MyCircle) tempShape;
+
+                        g.setStroke(tempCircle.getStroke().getValue());
+                        g.setFill(tempCircle.getFill().getValue());
+
+                        pasteCircle = new MyCircle();
+
+                        pasteCircle.setGraphicsContext(g);
+                        pasteCircle.setColor(tempCircle.getStroke());
+                        pasteCircle.setFill(tempCircle.getFill());
+                        pasteCircle.setCenterPoint(pastePoint.getX(), pastePoint.getY());
+                        pasteCircle.setRadius(tempCircle.getRadius());
+                        //pasteCircle.check();
+                        pasteCircle.draw();
+
+                        undoHistory.push(pasteCircle);
+                    }
+                    else if(tempShape.getClass() == MyOpenPolygon.class){
+
+                        System.out.println("Copying an open polygon...");
+
+                        MyOpenPolygon tempOpenPolygon = (MyOpenPolygon) tempShape;
+
+                        g.setStroke(tempOpenPolygon.getStroke().getValue());
+
+                        pasteOpenPolygon = new MyOpenPolygon();
+
+                        pasteOpenPolygon.setGraphicsContext(g);
+                        pasteOpenPolygon.setColor(tempOpenPolygon.getStroke());
+                        pasteOpenPolygon.setFill(tempOpenPolygon.getFill());
+
+                        ArrayList<Double> polygonX = tempOpenPolygon.getAllXValues();
+                        ArrayList<Double> polygonY = tempOpenPolygon.getAllYValues();
+
+                        double xDifference = pastePoint.getX() - polygonX.get(0);
+                        double yDifference = pastePoint.getY() - polygonY.get(0);
+
+                        for(int i = 0; i < polygonX.size(); i++){
+                            pasteOpenPolygon.addPoint(polygonX.get(i) + xDifference, polygonY.get(i)+ yDifference);
+                        }
+
+                        pasteOpenPolygon.draw();
+
+                        undoHistory.add(pasteOpenPolygon);
+                    }
+                    else if(tempShape.getClass() == MyClosedPolygon.class){
+
+                        System.out.println("Copying a closed polygon...");
+
+                        MyClosedPolygon tempClosedPolygon = (MyClosedPolygon) tempShape;
+
+                        g.setStroke(tempClosedPolygon.getStroke().getValue());
+
+                        pasteClosedPolygon = new MyClosedPolygon();
+
+                        pasteClosedPolygon.setGraphicsContext(g);
+                        pasteClosedPolygon.setColor(tempClosedPolygon.getStroke());
+                        pasteClosedPolygon.setFill(tempClosedPolygon.getFill());
+
+                        ArrayList<Double> polygonX = tempClosedPolygon.getAllXValues();
+                        ArrayList<Double> polygonY = tempClosedPolygon.getAllYValues();
+
+                        double xDifference = pastePoint.getX() - polygonX.get(0);
+                        double yDifference = pastePoint.getY() - polygonY.get(0);
+
+                        for(int i = 0; i < polygonX.size(); i++){
+                            pasteClosedPolygon.addPoint(polygonX.get(i) + xDifference, polygonY.get(i)+ yDifference);
+                        }
+
+                        pasteClosedPolygon.draw();
+
+                        undoHistory.add(pasteClosedPolygon);
+                    }
+
                 }
                 else{
                     continue;

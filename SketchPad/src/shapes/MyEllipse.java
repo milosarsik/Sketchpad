@@ -20,6 +20,14 @@ public class MyEllipse extends MyShape {
         return ellipse.contains(point);
     }
 
+
+    public ColorPicker getStroke(){
+        return cpLine;
+    }
+    public ColorPicker getFill(){
+        return cpFill;
+    }
+
     public void setCenterPoint(double centerX, double centerY){
         this.centerX = centerX;
         this.centerY = centerY;

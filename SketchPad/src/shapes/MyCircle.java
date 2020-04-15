@@ -18,6 +18,13 @@ public class MyCircle extends MyShape {
     ColorPicker cpLine;
     ColorPicker cpFill;
 
+    public ColorPicker getStroke(){
+        return cpLine;
+    }
+    public ColorPicker getFill(){
+        return cpFill;
+    }
+
     public boolean containsPoint(Point2D point){
         return circle.contains(point);
     }
@@ -44,6 +51,10 @@ public class MyCircle extends MyShape {
 
     public void setRadius(){
         circle.setRadius((Math.abs(endX - centerX) + Math.abs(endY - centerY)) / 2);
+    }
+
+    public void setRadius(double radius){
+        circle.setRadius(radius);
     }
 
     public double getRadius(){

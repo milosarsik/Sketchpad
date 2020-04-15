@@ -81,11 +81,11 @@ public class MyRectangle extends MyShape{
     }
 
     public void setColor(ColorPicker colorPicker){
-        cpLine = colorPicker;
+        this.cpLine = colorPicker;
     }
 
     public void setFill(ColorPicker colorPicker){
-        cpFill = colorPicker;
+        this.cpFill = colorPicker;
     }
 
     public void setGraphicsContext(GraphicsContext graphicsContext){
