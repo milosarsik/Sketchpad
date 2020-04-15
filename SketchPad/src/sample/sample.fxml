@@ -10,6 +10,12 @@
    <children>
       <MenuBar fx:id="menuBar" layoutY="1.0" prefHeight="26.0" prefWidth="1000.0">
         <menus>
+            <Menu mnemonicParsing="false" text="File">
+              <items>
+                <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#save" text="Save" />
+                  <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" onAction="#open" text="Load" />
+              </items>
+            </Menu>
           <Menu mnemonicParsing="false" text="Modes">
             <items>
               <MenuItem fx:id="scribble" mnemonicParsing="false" onAction="#setModeScribble" text="Scribble" />

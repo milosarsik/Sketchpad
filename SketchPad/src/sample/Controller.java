@@ -1,16 +1,27 @@
 package sample;
 
 import actions.ClearAction;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import shapes.*;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
@@ -112,6 +123,47 @@ public class Controller {
 
     @FXML
     private Canvas drawingCanvas;
+
+    /*
+    * Save image
+    * */
+    @FXML
+    void save(ActionEvent event){
+        FileChooser savefile = new FileChooser();
+        savefile.setTitle("Save File");
+
+        File file = savefile.showSaveDialog(Main.stage);
+        if (file != null) {
+            try {
+                WritableImage writableImage = new WritableImage(1000, 1000);
+                drawingCanvas.snapshot(null, writableImage);
+                RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
+                ImageIO.write(renderedImage, "png", file);
+            } catch (IOException ex) {
+                System.out.println("Error!");
+            }
+        }
+    }
+
+    /*
+    * Open image
+    * */
+    @FXML
+    void open(ActionEvent event){
+        FileChooser openFile = new FileChooser();
+        openFile.setTitle("Open File");
+        File file = openFile.showOpenDialog(Main.stage);
+        if (file != null) {
+            try {
+                InputStream io = new FileInputStream(file);
+                Image img = new Image(io);
+                drawingCanvas.getGraphicsContext2D().drawImage(img, 0, 0);
+            } catch (IOException ex) {
+                System.out.println("Error!");
+            }
+        }
+    }
+
 
     /*
     * Open getting started information page
@@ -415,6 +467,8 @@ public class Controller {
 
     /*
     * Start of end draw event
+    *
+    * Bug #1:
     * */
     @FXML
     void endDraw(MouseEvent event) {
@@ -694,7 +748,6 @@ public class Controller {
 
                         undoHistory.add(pasteClosedPolygon);
                     }
-
                 }
                 else{
                     continue;

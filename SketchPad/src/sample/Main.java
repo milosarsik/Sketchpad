@@ -9,8 +9,12 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    public static Stage stage;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
+        stage = primaryStage;
+
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Paint It!");
         primaryStage.getIcons().add(new Image("icon.jpg"));
