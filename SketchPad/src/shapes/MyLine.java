@@ -6,23 +6,19 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.shape.Line;
 
 public class MyLine extends MyShape {
-
-    private Line line = new Line();
-
     private GraphicsContext graphicsContext;
     private ColorPicker cpLine;
 
-    public void myLine(){}
+    private Line line = new Line();
 
-    public void myLine(GraphicsContext graphicsContext){
+    public MyLine(){}
+
+    public void setGraphicsContext(GraphicsContext graphicsContext){
         this.graphicsContext = graphicsContext;
     }
 
-    public ColorPicker getStroke(){
-        return cpLine;
-    }
-    public boolean containsPoint(Point2D point){
-        return line.contains(point);
+    public void setColor(ColorPicker colorPicker){
+        cpLine = colorPicker;
     }
 
     public void setStartPoint(double x, double y){
@@ -33,6 +29,10 @@ public class MyLine extends MyShape {
     public void setEndPoint(double x, double y){
         line.setEndX(x);
         line.setEndY(y);
+    }
+
+    public boolean containsPoint(Point2D point){
+        return line.contains(point);
     }
 
     public double getStartX(){
@@ -51,17 +51,12 @@ public class MyLine extends MyShape {
         return line.getEndY();
     }
 
-    public void setGraphicsContext(GraphicsContext graphicsContext){
-        this.graphicsContext = graphicsContext;
+    public ColorPicker getColor(){
+        return cpLine;
     }
-
-    public void setColor(ColorPicker colorPicker){
-        cpLine = colorPicker;
-    }
-
 
     public void draw() {
-        graphicsContext.setStroke(cpLine.getValue());
+        graphicsContext.setStroke(getColor().getValue());
         graphicsContext.strokeLine(getStartX(), getStartY(), getEndX(), getEndY());
     }
 }

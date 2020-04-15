@@ -16,7 +16,6 @@ import javafx.stage.FileChooser;
 import shapes.*;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -564,7 +563,7 @@ public class Controller {
 
                         MyScribble tempScribble = (MyScribble) tempShape;
 
-                        g.setStroke(tempScribble.getStroke().getValue());
+                        g.setStroke(tempScribble.getColor().getValue());
 
                         pasteScribble = new MyScribble();
 
@@ -595,12 +594,12 @@ public class Controller {
 
                         MyLine tempLine = (MyLine) tempShape;
 
-                        g.setStroke(tempLine.getStroke().getValue());
+                        g.setStroke(tempLine.getColor().getValue());
 
                         pasteLine = new MyLine();
 
                         pasteLine.setGraphicsContext(g);
-                        pasteLine.setColor(tempLine.getStroke());
+                        pasteLine.setColor(tempLine.getColor());
 
                         double xDifference = pastePoint.getX() - tempLine.getStartX();
                         double yDifference = pastePoint.getY() - tempLine.getStartY();

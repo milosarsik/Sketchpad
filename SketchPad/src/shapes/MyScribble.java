@@ -66,10 +66,6 @@ public class MyScribble extends MyShape {
         return endY;
     }
 
-    public ColorPicker getStroke(){
-        return cpLine;
-    }
-
     public double[] getAllXValues(){
         double[] xVals = new double[xValues.size()];
 
@@ -90,8 +86,12 @@ public class MyScribble extends MyShape {
         return yVals;
     }
 
+    public ColorPicker getColor(){
+        return cpLine;
+    }
+
     public void draw(){
-        graphicsContext.setStroke(cpLine.getValue());
+        graphicsContext.setStroke(getColor().getValue());
         graphicsContext.beginPath();
         graphicsContext.lineTo(getStartX(), getStartY());
 
