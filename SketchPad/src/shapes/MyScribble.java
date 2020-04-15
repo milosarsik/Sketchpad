@@ -7,29 +7,22 @@ import javafx.scene.control.ColorPicker;
 import java.util.ArrayList;
 
 public class MyScribble extends MyShape {
-    public double startX, startY;
-    public double endX, endY;
-
-    ArrayList<Double> xValues = new ArrayList<>();
-    ArrayList<Double> yValues = new ArrayList<>();
-
     private GraphicsContext graphicsContext;
     private ColorPicker cpLine;
 
-    public void myScribble(){}
+    private double startX, startY, endX, endY;
 
-    public void myScribble(GraphicsContext graphicsContext){
+    private ArrayList<Double> xValues = new ArrayList<>();
+    private ArrayList<Double> yValues = new ArrayList<>();
+
+    public MyScribble(){}
+
+    public void setGraphicsContext(GraphicsContext graphicsContext){
         this.graphicsContext = graphicsContext;
     }
 
-    public boolean containsPoint(Point2D point){
-        for(int i = 0; i < xValues.size(); i++){
-            if(xValues.get(i) == point.getX() && yValues.get(i) == point.getY()){
-                return true;
-            }
-        }
-
-        return false;
+    public void setColor(ColorPicker colorPicker){
+        cpLine = colorPicker;
     }
 
     public void setStartPoint(double startX, double startY){
@@ -47,8 +40,14 @@ public class MyScribble extends MyShape {
         yValues.add(y);
     }
 
-    public ColorPicker getStroke(){
-        return cpLine;
+    public boolean containsPoint(Point2D point){
+        for(int i = 0; i < xValues.size(); i++){
+            if(xValues.get(i) == point.getX() && yValues.get(i) == point.getY()){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public double getStartX(){
@@ -67,12 +66,17 @@ public class MyScribble extends MyShape {
         return endY;
     }
 
+    public ColorPicker getStroke(){
+        return cpLine;
+    }
+
     public double[] getAllXValues(){
         double[] xVals = new double[xValues.size()];
 
         for(int i = 0; i < xValues.size(); i++){
             xVals[i] = xValues.get(i);
         }
+
         return xVals;
     }
 
@@ -84,14 +88,6 @@ public class MyScribble extends MyShape {
         }
 
         return yVals;
-    }
-
-    public void setGraphicsContext(GraphicsContext graphicsContext){
-        this.graphicsContext = graphicsContext;
-    }
-
-    public void setColor(ColorPicker colorPicker){
-        cpLine = colorPicker;
     }
 
     public void draw(){
@@ -108,6 +104,5 @@ public class MyScribble extends MyShape {
         graphicsContext.stroke();
 
         graphicsContext.closePath();
-
     }
 }
