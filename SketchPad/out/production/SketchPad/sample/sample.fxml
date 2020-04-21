@@ -44,6 +44,7 @@
           <Menu mnemonicParsing="false" text="Tools">
             <items>
                   <MenuItem fx:id="deleteMenuItem" mnemonicParsing="false" onAction="#setModeDelete" text="Delete" />
+                  <MenuItem fx:id="moveMenuItem" mnemonicParsing="false" onAction="#setModeMove" text="Move" />
                   <MenuItem fx:id="copyMenuItem" mnemonicParsing="false" onAction="#setModeCopy" text="Copy" />
               <MenuItem fx:id="clear" mnemonicParsing="false" onAction="#clearCanvas" text="Clear" />
             </items>
