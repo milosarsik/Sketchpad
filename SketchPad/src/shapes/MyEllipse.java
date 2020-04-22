@@ -6,26 +6,26 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.shape.Ellipse;
 
 public class MyEllipse extends MyShape {
-
-    Ellipse ellipse = new Ellipse();
-
-    private double centerX, centerY;
-    private double endX, endY;
-
     private GraphicsContext graphicsContext;
-    ColorPicker cpLine;
-    ColorPicker cpFill;
+    private ColorPicker cpLine;
+    private ColorPicker cpFill;
 
-    public boolean containsPoint(Point2D point){
-        return ellipse.contains(point);
+    private double centerX, centerY, endX, endY;
+
+    private Ellipse ellipse = new Ellipse();
+
+    public MyEllipse(){}
+
+    public void setGraphicsContext(GraphicsContext graphicsContext){
+        this.graphicsContext = graphicsContext;
     }
 
-
-    public ColorPicker getStroke(){
-        return cpLine;
+    public void setColor(ColorPicker colorPicker){
+        cpLine = colorPicker;
     }
-    public ColorPicker getFill(){
-        return cpFill;
+
+    public void setFill(ColorPicker colorPicker){
+        cpFill = colorPicker;
     }
 
     public void setCenterPoint(double centerX, double centerY){
@@ -34,13 +34,6 @@ public class MyEllipse extends MyShape {
 
         ellipse.setCenterX(centerX);
         ellipse.setCenterY(centerY);
-    }
-    public double getCenterX(){
-        return ellipse.getCenterX();
-    }
-
-    public double getCenterY(){
-        return  ellipse.getCenterY();
     }
 
     public void setEndPoint(double endX, double endY){
@@ -53,12 +46,8 @@ public class MyEllipse extends MyShape {
         ellipse.setRadiusY(Math.abs((endY - centerY)));
     }
 
-    public double getRadiusX(){
-        return ellipse.getRadiusX();
-    }
-
-    public double getRadiusY(){
-        return ellipse.getRadiusY();
+    public boolean containsPoint(Point2D point){
+        return ellipse.contains(point);
     }
 
     public void check(){
@@ -70,17 +59,28 @@ public class MyEllipse extends MyShape {
         }
     }
 
-    public void setColor(ColorPicker colorPicker){
-        cpLine = colorPicker;
+    public double getCenterX(){
+        return ellipse.getCenterX();
     }
 
-    public void setFill(ColorPicker colorPicker){
-        cpFill = colorPicker;
+    public double getCenterY(){
+        return  ellipse.getCenterY();
     }
 
+    public double getRadiusX(){
+        return ellipse.getRadiusX();
+    }
 
-    public void setGraphicsContext(GraphicsContext graphicsContext){
-        this.graphicsContext = graphicsContext;
+    public double getRadiusY(){
+        return ellipse.getRadiusY();
+    }
+
+    public ColorPicker getColor(){
+        return cpLine;
+    }
+
+    public ColorPicker getFill(){
+        return cpFill;
     }
 
     public void draw(){
@@ -89,6 +89,5 @@ public class MyEllipse extends MyShape {
 
         graphicsContext.strokeOval(getCenterX(), getCenterY(), getRadiusX(), getRadiusY());
         graphicsContext.fillOval(getCenterX(), getCenterY(), getRadiusX(), getRadiusY());
-
     }
 }

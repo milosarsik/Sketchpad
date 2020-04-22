@@ -6,27 +6,26 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.shape.Rectangle;
 
 public class MySquare extends MyShape {
-    public double startX, startY;
-    public double endX, endY;
-
-    Rectangle square = new Rectangle();
-
     private GraphicsContext graphicsContext;
     private ColorPicker cpLine;
     private ColorPicker cpFill;
 
-    public void MySquare(){
+    private double startX, startY, endX, endY;
+
+    private Rectangle square = new Rectangle();
+
+    public MySquare(){ }
+
+    public void setGraphicsContext(GraphicsContext graphicsContext){
+        this.graphicsContext = graphicsContext;
     }
 
-    public ColorPicker getStroke(){
-        return cpLine;
-    }
-    public ColorPicker getFill(){
-        return cpFill;
+    public void setColor(ColorPicker colorPicker){
+        cpLine = colorPicker;
     }
 
-    public boolean containsPoint(Point2D point){
-        return square.contains(point);
+    public void setFill(ColorPicker colorPicker){
+        cpFill = colorPicker;
     }
 
     public void setStartPoint(double startX, double startY){
@@ -42,20 +41,33 @@ public class MySquare extends MyShape {
         this.endY = endY;
     }
 
-    public double getX(){
-        return square.getX();
-    }
-
-    public double getY(){
-        return square.getY();
-    }
-
     public void setWidth(){
         square.setWidth(Math.abs((endX - startX)));
     }
 
     public void setHeight(){
         square.setHeight(Math.abs((endY - startY)));
+    }
+
+    public boolean containsPoint(Point2D point){
+        return square.contains(point);
+    }
+
+    public void check() {
+        if (getX() > endX) {
+            square.setX(endX);
+        }
+        if (getY() > endY) {
+            square.setY(endY);
+        }
+    }
+
+    public double getX(){
+        return square.getX();
+    }
+
+    public double getY(){
+        return square.getY();
     }
 
     public double getWidth(){
@@ -66,25 +78,12 @@ public class MySquare extends MyShape {
         return square.getHeight();
     }
 
-    public void check(){
-        if(getX() > endX) {
-            square.setX(endX);
-        }
-        if(getY() > endY) {
-            square.setY(endY);
-        }
+    public ColorPicker getColor(){
+        return cpLine;
     }
 
-    public void setColor(ColorPicker colorPicker){
-        cpLine = colorPicker;
-    }
-
-    public void setFill(ColorPicker colorPicker){
-        cpFill = colorPicker;
-    }
-
-    public void setGraphicsContext(GraphicsContext graphicsContext){
-        this.graphicsContext = graphicsContext;
+    public ColorPicker getFill(){
+        return cpFill;
     }
 
     public void draw(){
@@ -93,6 +92,5 @@ public class MySquare extends MyShape {
 
         graphicsContext.fillRect(getX(), getY(), getWidth(), getWidth());
         graphicsContext.strokeRect(getX(), getY(), getWidth(), getWidth());
-
     }
 }

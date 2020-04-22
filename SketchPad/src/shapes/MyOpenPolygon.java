@@ -7,20 +7,30 @@ import javafx.scene.control.ColorPicker;
 import java.util.ArrayList;
 
 public class MyOpenPolygon extends MyShape{
-
-    ArrayList<Double> polygonX = new ArrayList<Double>();
-    ArrayList<Double> polygonY = new ArrayList<Double>();
-
     private GraphicsContext graphicsContext;
-    ColorPicker cpLine;
-    ColorPicker cpFill;
+    private ColorPicker cpLine;
+    private ColorPicker cpFill;
 
-    public ArrayList<Double> getAllXValues(){
-        return polygonX;
+    private ArrayList<Double> polygonX = new ArrayList<Double>();
+    private ArrayList<Double> polygonY = new ArrayList<Double>();
+
+    public MyOpenPolygon(){}
+
+    public void setGraphicsContext(GraphicsContext graphicsContext){
+        this.graphicsContext = graphicsContext;
     }
 
-    public ArrayList<Double> getAllYValues(){
-        return polygonY;
+    public void setColor(ColorPicker colorPicker){
+        cpLine = colorPicker;
+    }
+
+    public void setFill(ColorPicker colorPicker){
+        cpFill = colorPicker;
+    }
+
+    public void addPoint(double x, double y){
+        polygonX.add(x);
+        polygonY.add(y);
     }
 
     // This wont really work for a polygon unless you click the edges
@@ -34,27 +44,20 @@ public class MyOpenPolygon extends MyShape{
         return false;
     }
 
-    public void addPoint(double x, double y){
-        polygonX.add(x);
-        polygonY.add(y);
+    public ArrayList<Double> getAllXValues(){
+        return polygonX;
     }
-    public ColorPicker getStroke(){
+
+    public ArrayList<Double> getAllYValues(){
+        return polygonY;
+    }
+
+    public ColorPicker getColor(){
         return cpLine;
     }
+
     public ColorPicker getFill(){
         return cpFill;
-    }
-
-    public void setColor(ColorPicker colorPicker){
-        cpLine = colorPicker;
-    }
-
-    public void setFill(ColorPicker colorPicker){
-        cpFill = colorPicker;
-    }
-
-    public void setGraphicsContext(GraphicsContext graphicsContext){
-        this.graphicsContext = graphicsContext;
     }
 
     public void draw(){

@@ -14,9 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import shapes.*;
-
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,119 +50,16 @@ public class Controller {
     public MyOpenPolygon pasteOpenPolygon;
     public MyClosedPolygon pasteClosedPolygon;
 
-    Stack<MyShape> undoHistory = new Stack<>();
-    Stack<MyShape> redoHistory = new Stack<>();
+    public Stack<MyShape> undoHistory = new Stack<>();
+    public Stack<MyShape> redoHistory = new Stack<>();
 
-    Point2D deletePoint;
-    Point2D copyPoint;
-    Point2D pastePoint;
-    Point2D movePoint;
-
-    MyShape copiedShape;
-
-    @FXML
-    private MenuBar menuBar;
-
-    @FXML
-    private MenuItem scribble;
-
-    @FXML
-    private MenuItem straightLine;
-
-    @FXML
-    private MenuItem rectangle;
-
-    @FXML
-    private MenuItem ellipse;
-
-    @FXML
-    private MenuItem square;
-
-    @FXML
-    private MenuItem circle;
-
-    @FXML
-    private MenuItem polygon;
-
-    @FXML
-    private MenuItem polygon1;
-
-    @FXML
-    private MenuItem black;
-
-    @FXML
-    private MenuItem blue;
-
-    @FXML
-    private MenuItem red;
-
-    @FXML
-    private MenuItem clear;
-
-    @FXML
-    private MenuItem select;
-
-    @FXML
-    private MenuItem select1;
-
-    @FXML
-    private MenuItem gettingStartedMenuItem;
-
-    @FXML
-    private Menu selectAndMove;
-
-    @FXML
-    private Menu options;
-
-    @FXML
-    private MenuItem undo;
-
-    @FXML
-    private MenuItem redo;
+    public Point2D deletePoint;
+    public Point2D copyPoint;
+    public Point2D pastePoint;
+    public Point2D movePoint;
 
     @FXML
     private Canvas drawingCanvas;
-
-    /*
-    * Save image
-    * */
-    @FXML
-    void save(ActionEvent event){
-        FileChooser savefile = new FileChooser();
-        savefile.setTitle("Save File");
-
-        File file = savefile.showSaveDialog(Main.stage);
-        if (file != null) {
-            try {
-                WritableImage writableImage = new WritableImage(1000, 1000);
-                drawingCanvas.snapshot(null, writableImage);
-                RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
-                ImageIO.write(renderedImage, "png", file);
-            } catch (IOException ex) {
-                System.out.println("Error!");
-            }
-        }
-    }
-
-    /*
-    * Open image
-    * */
-    @FXML
-    void open(ActionEvent event){
-        FileChooser openFile = new FileChooser();
-        openFile.setTitle("Open File");
-        File file = openFile.showOpenDialog(Main.stage);
-        if (file != null) {
-            try {
-                InputStream io = new FileInputStream(file);
-                Image img = new Image(io);
-                drawingCanvas.getGraphicsContext2D().drawImage(img, 0, 0);
-            } catch (IOException ex) {
-                System.out.println("Error!");
-            }
-        }
-    }
-
 
     /*
     * Open getting started information page
@@ -200,9 +95,8 @@ public class Controller {
                 "\n" +
                 "");
 
-        // show the dialog
+        // Show the dialog
         alert.show();
-
     }
 
     /*
@@ -316,7 +210,6 @@ public class Controller {
     void setModeMove(ActionEvent event){
         mode = "move";
     }
-
     /*
     * End of setMode
     * */
@@ -341,7 +234,7 @@ public class Controller {
         g = drawingCanvas.getGraphicsContext2D();
         g.setStroke(cpLine.getValue());
 
-        if(mode.equals("scribble")){
+        if(mode.equals("scribble")){        // Scribble
             g.setStroke(cpLine.getValue());
             g.beginPath();
             g.lineTo(event.getX(), event.getY());
@@ -352,7 +245,7 @@ public class Controller {
             myScribble.setColor(cpLine);
             myScribble.setStartPoint(event.getX(), event.getY());
         }
-        else if(mode.equals("straight line")){
+        else if(mode.equals("straight line")){      // Straight Line
             g.setStroke(cpLine.getValue());
 
             myLine = new MyLine();
@@ -361,7 +254,7 @@ public class Controller {
             myLine.setColor(cpLine);
             myLine.setStartPoint(event.getX(), event.getY());
         }
-        else if(mode.equals("rectangle")){
+        else if(mode.equals("rectangle")){      // Rectangle
             g.setStroke(cpLine.getValue());
             g.setFill(cpFill.getValue());
 
@@ -372,7 +265,7 @@ public class Controller {
             myRectangle.setFill(cpFill);
             myRectangle.setStartPoint(event.getX(), event.getY());
         }
-        else if(mode.equals("ellipse")){
+        else if(mode.equals("ellipse")){        // Ellipse
             g.setStroke(cpLine.getValue());
             g.setFill(cpFill.getValue());
 
@@ -383,27 +276,29 @@ public class Controller {
             myEllipse.setFill(cpFill);
             myEllipse.setCenterPoint(event.getX(), event.getY());
         }
-        else if(mode.equals("square")){
+        else if(mode.equals("square")){         // Square
             g.setStroke(cpLine.getValue());
             g.setFill(cpFill.getValue());
 
             mySquare = new MySquare();
+
             mySquare.setGraphicsContext(g);
             mySquare.setColor(cpLine);
             mySquare.setFill(cpFill);
             mySquare.setStartPoint(event.getX(), event.getY());
         }
-        else if(mode.equals("circle")) {
+        else if(mode.equals("circle")) {        // Circle
             g.setStroke(cpLine.getValue());
             g.setFill(cpFill.getValue());
 
             myCircle = new MyCircle();
+
             myCircle.setGraphicsContext(g);
             myCircle.setColor(cpLine);
             myCircle.setFill(cpFill);
             myCircle.setCenterPoint(event.getX(), event.getY());
         }
-        else if(mode.equals("open polygon")){
+        else if(mode.equals("open polygon")){       // Open Polygon
             g.setStroke(cpLine.getValue());
             g.setFill(cpFill.getValue());
 
@@ -414,7 +309,7 @@ public class Controller {
             myOpenPolygon.setFill(cpFill);
             myOpenPolygon.addPoint(event.getX(), event.getY());
         }
-        else if(mode.equals("closed polygon")){
+        else if(mode.equals("closed polygon")){         // Closed Polygon
             g.setStroke(cpLine.getValue());
             g.setFill(cpFill.getValue());
 
@@ -425,13 +320,13 @@ public class Controller {
             myClosedPolygon.setFill(cpFill);
             myClosedPolygon.addPoint(event.getX(), event.getY());
         }
-        else if(mode.equals("delete")){
+        else if(mode.equals("delete")){     // Delete Shape
             deletePoint = new Point2D(event.getX(), event.getY());
         }
-        else if(mode.equals("copy")){
+        else if(mode.equals("copy")){       // Copy Shape
             copyPoint = new Point2D(event.getX(), event.getY());
         }
-        else if(mode.equals("move")){
+        else if(mode.equals("move")){       // Move Shape
             deletePoint = new Point2D(event.getX(), event.getY());
         }
     }
@@ -444,31 +339,27 @@ public class Controller {
     * */
     @FXML
     void drag(MouseEvent event) {
-        if(mode.equals("scribble")){
+        if(mode.equals("scribble")){        // Scribble
             g.lineTo(event.getX(), event.getY());
             g.stroke();
 
             myScribble.addPoint(event.getX(), event.getY());
         }
-        if(mode.equals("open polygon")){
+        if(mode.equals("open polygon")){        // Open Polygon
             myOpenPolygon.addPoint(event.getX(), event.getY());
 
             try{
                 Thread.sleep(250);
             }
-            catch (Exception e){
-
-            }
+            catch (Exception e){ }
         }
-        if(mode.equals("closed polygon")){
+        if(mode.equals("closed polygon")){      // Close Polygon
             myClosedPolygon.addPoint(event.getX(), event.getY());
 
             try{
                 Thread.sleep(250);
             }
-            catch (Exception e){
-
-            }
+            catch (Exception e){ }
         }
     }
     /*
@@ -477,13 +368,11 @@ public class Controller {
 
     /*
     * Start of end draw event
-    *
-    * Bug #1:
     * */
     @FXML
     void endDraw(MouseEvent event) {
 
-        if(mode.equals("scribble")){
+        if(mode.equals("scribble")){        // Scribble
             g.lineTo(event.getX(), event.getY());
             g.stroke();
 
@@ -491,14 +380,14 @@ public class Controller {
 
             undoHistory.push(myScribble);
         }
-        else if(mode.equals("straight line")){
+        else if(mode.equals("straight line")){      // Straight Line
             myLine.setEndPoint(event.getX(), event.getY());
 
             myLine.draw();
 
             undoHistory.push(myLine);
         }
-        else if(mode.equals("rectangle")){
+        else if(mode.equals("rectangle")){          // Rectangle
             myRectangle.setEndPoint(event.getX(), event.getY());
             myRectangle.setWidth();
             myRectangle.setHeight();
@@ -508,7 +397,7 @@ public class Controller {
 
             undoHistory.push(myRectangle);
         }
-        else if(mode.equals("ellipse")){
+        else if(mode.equals("ellipse")){            // Ellipse
             myEllipse.setEndPoint(event.getX(), event.getY());
             myEllipse.setRadius();
             myEllipse.check();
@@ -517,7 +406,7 @@ public class Controller {
 
             undoHistory.push(myEllipse);
         }
-        else if(mode.equals("square")) {
+        else if(mode.equals("square")){             // Square
             mySquare.setEndPoint(event.getX(), event.getY());
             mySquare.setWidth();
             mySquare.setHeight();
@@ -527,7 +416,7 @@ public class Controller {
 
             undoHistory.push(mySquare);
         }
-        else if(mode.equals("circle")) {
+        else if(mode.equals("circle")) {            // Circle
             myCircle.setEndPoint(event.getX(), event.getY());
             myCircle.setRadius();
             myCircle.check();
@@ -536,28 +425,29 @@ public class Controller {
 
             undoHistory.push(myCircle);
         }
-        else if(mode.equals("open polygon")){
+        else if(mode.equals("open polygon")){       // Open Polygon
             myOpenPolygon.addPoint(event.getX(), event.getY());
             myOpenPolygon.draw();
 
             undoHistory.push(myOpenPolygon);
         }
-        else if(mode.equals("closed polygon")){
+        else if(mode.equals("closed polygon")){     // Closed Polygon
             myClosedPolygon.addPoint(event.getX(), event.getY());
             myClosedPolygon.draw();
 
             undoHistory.push(myClosedPolygon);
         }
-        else if(mode.equals("delete")){
+        else if(mode.equals("delete")){             // Delete Shape
             delete(deletePoint);
         }
-        else if(mode.equals("copy")) {
+        else if(mode.equals("copy")) {              // Copy Shape
             pastePoint = new Point2D(event.getX(), event.getY());
 
             Stack<MyShape> tempUndo = new Stack<>();
 
             // Create a copy stack of undoHistory
             Iterator<MyShape> undoHistoryIterator = undoHistory.iterator();
+
             while (undoHistoryIterator.hasNext()) {
                 tempUndo.push(undoHistoryIterator.next());
             }
@@ -567,9 +457,7 @@ public class Controller {
                 MyShape tempShape = tempUndo.pop();
 
                 if (tempShape.containsPoint(copyPoint)) {
-
                     if(tempShape.getClass() == MyScribble.class){
-
                         System.out.println("Copying a scribble...");
 
                         MyScribble tempScribble = (MyScribble) tempShape;
@@ -580,7 +468,6 @@ public class Controller {
 
                         pasteScribble.setGraphicsContext(g);
                         pasteScribble.setColor(cpLine);
-
                         pasteScribble.setStartPoint(pastePoint.getX(), pastePoint.getY());
 
                         double [] oldX = tempScribble.getAllXValues();
@@ -598,10 +485,11 @@ public class Controller {
                         pasteScribble.draw();
 
                         undoHistory.push(pasteScribble);
+
+                        break;
                     }
                     else if(tempShape.getClass() == MyLine.class){
                         System.out.println("Copying a line...");
-
 
                         MyLine tempLine = (MyLine) tempShape;
 
@@ -622,31 +510,36 @@ public class Controller {
 
                         undoHistory.push(pasteLine);
 
+                        break;
                     }
                     else if(tempShape.getClass() == MyRectangle.class){
                         System.out.println("Copying a rectangle...");
-//COLOR WORKS HERE
+
                         MyRectangle tempRectangle = (MyRectangle) tempShape;
 
                         pasteRectangle = new MyRectangle();
 
                         pasteRectangle.setGraphicsContext(g);
-                        pasteRectangle.setColor(tempRectangle.getStroke());
+                        pasteRectangle.setColor(tempRectangle.getColor());
                         pasteRectangle.setFill(tempRectangle.getFill());
 
                         pasteRectangle.setStartPoint(pastePoint.getX(), pastePoint.getY());
                         pasteRectangle.setEndPoint(pastePoint.getX() + tempRectangle.getWidth(), pastePoint.getY() + tempRectangle.getHeight());
                         pasteRectangle.setWidth();
                         pasteRectangle.setHeight();
-                        //pasteRectangle.check();
+
                         pasteRectangle.draw();
 
                         undoHistory.push(pasteRectangle);
+
+                        break;
                     }
                     else if(tempShape.getClass() == MyEllipse.class){
+                        System.out.println("Copying an ellipse...");
+
                         MyEllipse tempEllipse = (MyEllipse) tempShape;
 
-                        g.setStroke(tempEllipse.getStroke().getValue());
+                        g.setStroke(tempEllipse.getColor().getValue());
                         g.setFill(tempEllipse.getFill().getValue());
 
                         pasteEllipse = new MyEllipse();
@@ -654,66 +547,73 @@ public class Controller {
                         pasteEllipse.setGraphicsContext(g);
                         pasteEllipse.setColor(cpLine);
                         pasteEllipse.setFill(cpFill);
+
                         pasteEllipse.setCenterPoint(pastePoint.getX(), pastePoint.getY());
                         pasteEllipse.setEndPoint(pasteEllipse.getCenterX() + tempEllipse.getRadiusX(), pasteEllipse.getCenterY() + tempEllipse.getRadiusY());
                         pasteEllipse.setRadius();
-                        //pasteEllipse.check();
+
                         pasteEllipse.draw();
 
                         undoHistory.push(pasteEllipse);
+
+                        break;
                     }
                     else if(tempShape.getClass() == MySquare.class){
                         System.out.println("Copying a square...");
-//COLOR WORKS HERE
+
                         MySquare tempSquare = (MySquare) tempShape;
 
                         pasteSquare = new MySquare();
 
                         pasteSquare.setGraphicsContext(g);
-                        pasteSquare.setColor(tempSquare.getStroke());
+                        pasteSquare.setColor(tempSquare.getColor());
                         pasteSquare.setFill(tempSquare.getFill());
 
                         pasteSquare.setStartPoint(pastePoint.getX(), pastePoint.getY());
                         pasteSquare.setEndPoint(pastePoint.getX() + tempSquare.getWidth(), pastePoint.getY() + tempSquare.getHeight());
                         pasteSquare.setWidth();
                         pasteSquare.setHeight();
-                        //pasteRectangle.check();
+
                         pasteSquare.draw();
 
                         undoHistory.push(pasteSquare);
+
+                        break;
                     }
                     else if(tempShape.getClass() == MyCircle.class){
                         System.out.println("Copying a circle...");
 
                         MyCircle tempCircle = (MyCircle) tempShape;
 
-                        g.setStroke(tempCircle.getStroke().getValue());
+                        g.setStroke(tempCircle.getColor().getValue());
                         g.setFill(tempCircle.getFill().getValue());
 
                         pasteCircle = new MyCircle();
 
                         pasteCircle.setGraphicsContext(g);
-                        pasteCircle.setColor(tempCircle.getStroke());
+                        pasteCircle.setColor(tempCircle.getColor());
                         pasteCircle.setFill(tempCircle.getFill());
+
                         pasteCircle.setCenterPoint(pastePoint.getX(), pastePoint.getY());
                         pasteCircle.setRadius(tempCircle.getRadius());
-                        //pasteCircle.check();
+
                         pasteCircle.draw();
 
                         undoHistory.push(pasteCircle);
+
+                        break;
                     }
                     else if(tempShape.getClass() == MyOpenPolygon.class){
-
                         System.out.println("Copying an open polygon...");
 
                         MyOpenPolygon tempOpenPolygon = (MyOpenPolygon) tempShape;
 
-                        g.setStroke(tempOpenPolygon.getStroke().getValue());
+                        g.setStroke(tempOpenPolygon.getColor().getValue());
 
                         pasteOpenPolygon = new MyOpenPolygon();
 
                         pasteOpenPolygon.setGraphicsContext(g);
-                        pasteOpenPolygon.setColor(tempOpenPolygon.getStroke());
+                        pasteOpenPolygon.setColor(tempOpenPolygon.getColor());
                         pasteOpenPolygon.setFill(tempOpenPolygon.getFill());
 
                         ArrayList<Double> polygonX = tempOpenPolygon.getAllXValues();
@@ -729,6 +629,8 @@ public class Controller {
                         pasteOpenPolygon.draw();
 
                         undoHistory.push(pasteOpenPolygon);
+
+                        break;
                     }
                     else if(tempShape.getClass() == MyClosedPolygon.class){
 
@@ -736,12 +638,12 @@ public class Controller {
 
                         MyClosedPolygon tempClosedPolygon = (MyClosedPolygon) tempShape;
 
-                        g.setStroke(tempClosedPolygon.getStroke().getValue());
+                        g.setStroke(tempClosedPolygon.getColor().getValue());
 
                         pasteClosedPolygon = new MyClosedPolygon();
 
                         pasteClosedPolygon.setGraphicsContext(g);
-                        pasteClosedPolygon.setColor(tempClosedPolygon.getStroke());
+                        pasteClosedPolygon.setColor(tempClosedPolygon.getColor());
                         pasteClosedPolygon.setFill(tempClosedPolygon.getFill());
 
                         ArrayList<Double> polygonX = tempClosedPolygon.getAllXValues();
@@ -757,6 +659,8 @@ public class Controller {
                         pasteClosedPolygon.draw();
 
                         undoHistory.push(pasteClosedPolygon);
+
+                        break;
                     }
                 }
                 else{
@@ -769,6 +673,7 @@ public class Controller {
 
             // Create a copy stack of undoHistory
             Iterator<MyShape> undoHistoryIterator = undoHistory.iterator();
+
             while (undoHistoryIterator.hasNext()) {
                 tempUndo.push(undoHistoryIterator.next());
             }
@@ -780,9 +685,7 @@ public class Controller {
                 MyShape tempShape = tempUndo.pop();
 
                 if (tempShape.containsPoint(deletePoint)) {
-
                     if(tempShape.getClass() == MyScribble.class){
-
                         System.out.println("Moving a scribble...");
 
                         MyScribble tempScribble = (MyScribble) tempShape;
@@ -813,11 +716,13 @@ public class Controller {
                         delete(deletePoint);
 
                         undoHistory.push(pasteScribble);
+
                         drawAll();
+
+                        break;
                     }
                     else if(tempShape.getClass() == MyLine.class){
                         System.out.println("Moving a line...");
-
 
                         MyLine tempLine = (MyLine) tempShape;
 
@@ -841,23 +746,25 @@ public class Controller {
                         undoHistory.push(pasteLine);
 
                         drawAll();
+
+                        break;
                     }
                     else if(tempShape.getClass() == MyRectangle.class){
                         System.out.println("Moving a rectangle...");
-//COLOR WORKS HERE
+
                         MyRectangle tempRectangle = (MyRectangle) tempShape;
 
                         pasteRectangle = new MyRectangle();
 
                         pasteRectangle.setGraphicsContext(g);
-                        pasteRectangle.setColor(tempRectangle.getStroke());
+                        pasteRectangle.setColor(tempRectangle.getColor());
                         pasteRectangle.setFill(tempRectangle.getFill());
 
                         pasteRectangle.setStartPoint(movePoint.getX(), movePoint.getY());
                         pasteRectangle.setEndPoint(movePoint.getX() + tempRectangle.getWidth(), movePoint.getY() + tempRectangle.getHeight());
                         pasteRectangle.setWidth();
                         pasteRectangle.setHeight();
-                        //pasteRectangle.check();
+
                         pasteRectangle.draw();
 
                         delete(deletePoint);
@@ -865,11 +772,13 @@ public class Controller {
                         undoHistory.push(pasteRectangle);
 
                         drawAll();
+
+                        break;
                     }
                     else if(tempShape.getClass() == MyEllipse.class){
                         MyEllipse tempEllipse = (MyEllipse) tempShape;
 
-                        g.setStroke(tempEllipse.getStroke().getValue());
+                        g.setStroke(tempEllipse.getColor().getValue());
                         g.setFill(tempEllipse.getFill().getValue());
 
                         pasteEllipse = new MyEllipse();
@@ -877,10 +786,11 @@ public class Controller {
                         pasteEllipse.setGraphicsContext(g);
                         pasteEllipse.setColor(cpLine);
                         pasteEllipse.setFill(cpFill);
+
                         pasteEllipse.setCenterPoint(movePoint.getX(), movePoint.getY());
                         pasteEllipse.setEndPoint(pasteEllipse.getCenterX() + tempEllipse.getRadiusX(), pasteEllipse.getCenterY() + tempEllipse.getRadiusY());
                         pasteEllipse.setRadius();
-                        //pasteEllipse.check();
+
                         pasteEllipse.draw();
 
                         delete(deletePoint);
@@ -888,23 +798,25 @@ public class Controller {
                         undoHistory.push(pasteEllipse);
 
                         drawAll();
+
+                        break;
                     }
                     else if(tempShape.getClass() == MySquare.class){
                         System.out.println("Moving a square...");
-//COLOR WORKS HERE
+
                         MySquare tempSquare = (MySquare) tempShape;
 
                         pasteSquare = new MySquare();
 
                         pasteSquare.setGraphicsContext(g);
-                        pasteSquare.setColor(tempSquare.getStroke());
+                        pasteSquare.setColor(tempSquare.getColor());
                         pasteSquare.setFill(tempSquare.getFill());
 
                         pasteSquare.setStartPoint(movePoint.getX(), movePoint.getY());
                         pasteSquare.setEndPoint(movePoint.getX() + tempSquare.getWidth(), movePoint.getY() + tempSquare.getHeight());
                         pasteSquare.setWidth();
                         pasteSquare.setHeight();
-                        //pasteRectangle.check();
+
                         pasteSquare.draw();
 
                         delete(deletePoint);
@@ -912,23 +824,26 @@ public class Controller {
                         undoHistory.push(pasteSquare);
 
                         drawAll();
+
+                        break;
                     }
                     else if(tempShape.getClass() == MyCircle.class){
                         System.out.println("Moving a circle...");
 
                         MyCircle tempCircle = (MyCircle) tempShape;
 
-                        g.setStroke(tempCircle.getStroke().getValue());
+                        g.setStroke(tempCircle.getColor().getValue());
                         g.setFill(tempCircle.getFill().getValue());
 
                         pasteCircle = new MyCircle();
 
                         pasteCircle.setGraphicsContext(g);
-                        pasteCircle.setColor(tempCircle.getStroke());
+                        pasteCircle.setColor(tempCircle.getColor());
                         pasteCircle.setFill(tempCircle.getFill());
+
                         pasteCircle.setCenterPoint(movePoint.getX(), movePoint.getY());
                         pasteCircle.setRadius(tempCircle.getRadius());
-                        //pasteCircle.check();
+
                         pasteCircle.draw();
 
                         delete(deletePoint);
@@ -936,19 +851,20 @@ public class Controller {
                         undoHistory.push(pasteCircle);
 
                         drawAll();
+
+                        break;
                     }
                     else if(tempShape.getClass() == MyOpenPolygon.class){
-
                         System.out.println("Moving an open polygon...");
 
                         MyOpenPolygon tempOpenPolygon = (MyOpenPolygon) tempShape;
 
-                        g.setStroke(tempOpenPolygon.getStroke().getValue());
+                        g.setStroke(tempOpenPolygon.getColor().getValue());
 
                         pasteOpenPolygon = new MyOpenPolygon();
 
                         pasteOpenPolygon.setGraphicsContext(g);
-                        pasteOpenPolygon.setColor(tempOpenPolygon.getStroke());
+                        pasteOpenPolygon.setColor(tempOpenPolygon.getColor());
                         pasteOpenPolygon.setFill(tempOpenPolygon.getFill());
 
                         ArrayList<Double> polygonX = tempOpenPolygon.getAllXValues();
@@ -968,19 +884,20 @@ public class Controller {
                         undoHistory.push(pasteOpenPolygon);
 
                         drawAll();
+
+                        break;
                     }
                     else if(tempShape.getClass() == MyClosedPolygon.class){
-
                         System.out.println("Moving a closed polygon...");
 
                         MyClosedPolygon tempClosedPolygon = (MyClosedPolygon) tempShape;
 
-                        g.setStroke(tempClosedPolygon.getStroke().getValue());
+                        g.setStroke(tempClosedPolygon.getColor().getValue());
 
                         pasteClosedPolygon = new MyClosedPolygon();
 
                         pasteClosedPolygon.setGraphicsContext(g);
-                        pasteClosedPolygon.setColor(tempClosedPolygon.getStroke());
+                        pasteClosedPolygon.setColor(tempClosedPolygon.getColor());
                         pasteClosedPolygon.setFill(tempClosedPolygon.getFill());
 
                         ArrayList<Double> polygonX = tempClosedPolygon.getAllXValues();
@@ -1000,6 +917,8 @@ public class Controller {
                         undoHistory.push(pasteClosedPolygon);
 
                         drawAll();
+
+                        break;
                     }
                 }
                 else{
@@ -1017,7 +936,6 @@ public class Controller {
     * */
     @FXML
     void undo(ActionEvent event) {
-
         if(!undoHistory.empty()){
             MyShape removedShape = undoHistory.pop();
             redoHistory.push(removedShape);
@@ -1027,6 +945,7 @@ public class Controller {
             g.clearRect(0, 0, drawingCanvas.getWidth(), drawingCanvas.getHeight());
 
             Iterator iterator = undoHistory.iterator();
+
             while(iterator.hasNext()){
                 tempStack.push((MyShape) iterator.next());
             }
@@ -1092,6 +1011,7 @@ public class Controller {
             g.clearRect(0, 0, drawingCanvas.getWidth(), drawingCanvas.getHeight());
 
             Iterator iterator = undoHistory.iterator();
+
             while(iterator.hasNext()){
                 tempStack.push((MyShape) iterator.next());
             }
@@ -1154,6 +1074,7 @@ public class Controller {
 
         // Create a copy stack of undoHistory
         Iterator<MyShape> undoHistoryIterator = undoHistory.iterator();
+
         while(undoHistoryIterator.hasNext()){
             tempUndo.push(undoHistoryIterator.next());
         }
@@ -1167,6 +1088,7 @@ public class Controller {
 
                 // Iterate through undoHistory stack and remove the deleted shape
                 Iterator<MyShape> removalIterator = undoHistory.iterator();
+
                 while(removalIterator.hasNext()){
                     if(removalIterator.next() == redoHistory.peek()){
                         removalIterator.remove();
@@ -1183,6 +1105,7 @@ public class Controller {
                 Stack<MyShape> drawStack = new Stack<>();
 
                 Iterator iterator = undoHistory.iterator();
+
                 while(iterator.hasNext()){
                     drawStack.push((MyShape) iterator.next());
                 }
@@ -1242,14 +1165,17 @@ public class Controller {
      * End of delete
      * */
 
+    /*
+    * Start of draw all
+    * */
     public void drawAll(){
-
         if(!undoHistory.empty()){
             Stack<MyShape> tempStack = new Stack<>();
 
             g.clearRect(0, 0, drawingCanvas.getWidth(), drawingCanvas.getHeight());
 
             Iterator iterator = undoHistory.iterator();
+
             while(iterator.hasNext()){
                 tempStack.push((MyShape) iterator.next());
             }
@@ -1294,6 +1220,50 @@ public class Controller {
                     MyOpenPolygon tempOpenPolygon = (MyOpenPolygon) tempShape;
                     tempOpenPolygon.draw();
                 }
+            }
+        }
+    }
+    /*
+    * End of draw all
+    * */
+
+    /*
+     * Save image
+     * */
+    @FXML
+    void save(ActionEvent event){
+        FileChooser savefile = new FileChooser();
+        savefile.setTitle("Save File");
+        File file = savefile.showSaveDialog(Main.stage);
+
+        if (file != null) {
+            try {
+                WritableImage writableImage = new WritableImage(1000, 1000);
+                drawingCanvas.snapshot(null, writableImage);
+                RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
+                ImageIO.write(renderedImage, "png", file);
+            } catch (IOException ex) {
+                System.out.println("Error!");
+            }
+        }
+    }
+
+    /*
+     * Open image
+     * */
+    @FXML
+    void open(ActionEvent event){
+        FileChooser openFile = new FileChooser();
+        openFile.setTitle("Open File");
+        File file = openFile.showOpenDialog(Main.stage);
+
+        if (file != null) {
+            try {
+                InputStream io = new FileInputStream(file);
+                Image img = new Image(io);
+                drawingCanvas.getGraphicsContext2D().drawImage(img, 0, 0);
+            } catch (IOException ex) {
+                System.out.println("Error!");
             }
         }
     }

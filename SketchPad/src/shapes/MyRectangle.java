@@ -6,28 +6,26 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.shape.Rectangle;
 
 public class MyRectangle extends MyShape{
-    public double startX, startY;
-    public double endX, endY;
-    public double width, height;
-
-    Rectangle rectangle = new Rectangle();
-
     private GraphicsContext graphicsContext;
     private ColorPicker cpLine;
     private ColorPicker cpFill;
 
-    public void MyRectangle(){
+    public double startX, startY, endX, endY, width, height;
+
+    private Rectangle rectangle = new Rectangle();
+
+    public MyRectangle(){ }
+
+    public void setGraphicsContext(GraphicsContext graphicsContext){
+        this.graphicsContext = graphicsContext;
     }
 
-    public ColorPicker getStroke(){
-        return cpLine;
-    }
-    public ColorPicker getFill(){
-        return cpFill;
+    public void setColor(ColorPicker colorPicker){
+        this.cpLine = colorPicker;
     }
 
-    public boolean containsPoint(Point2D point){
-        return rectangle.contains(point);
+    public void setFill(ColorPicker colorPicker){
+        this.cpFill = colorPicker;
     }
 
     public void setStartPoint(double startX, double startY){
@@ -43,14 +41,6 @@ public class MyRectangle extends MyShape{
         this.endY = endY;
     }
 
-    public double getX(){
-        return rectangle.getX();
-    }
-
-    public double getY(){
-        return rectangle.getY();
-    }
-
     public void setWidth(){
         this.width = Math.abs((endX - startX));
 
@@ -63,12 +53,8 @@ public class MyRectangle extends MyShape{
         rectangle.setHeight(Math.abs((endY - startY)));
     }
 
-    public double getWidth(){
-        return rectangle.getWidth();
-    }
-
-    public double getHeight() {
-        return rectangle.getHeight();
+    public boolean containsPoint(Point2D point){
+        return rectangle.contains(point);
     }
 
     public void check(){
@@ -80,28 +66,28 @@ public class MyRectangle extends MyShape{
         }
     }
 
-    public void setColor(ColorPicker colorPicker){
-        this.cpLine = colorPicker;
+    public double getX(){
+        return rectangle.getX();
     }
 
-    public void setFill(ColorPicker colorPicker){
-        this.cpFill = colorPicker;
+    public double getY(){
+        return rectangle.getY();
     }
 
-    public void setGraphicsContext(GraphicsContext graphicsContext){
-        this.graphicsContext = graphicsContext;
+    public double getWidth(){
+        return rectangle.getWidth();
     }
 
-    public void translate(Point2D newStartPoint){
-        setStartPoint(newStartPoint.getX(), newStartPoint.getY());
-        setEndPoint(newStartPoint.getX() + width, newStartPoint.getY() + height);
-        setWidth();
-        setHeight();
-        //check();
+    public double getHeight() {
+        return rectangle.getHeight();
+    }
 
-        draw();
+    public ColorPicker getColor(){
+        return cpLine;
+    }
 
-
+    public ColorPicker getFill(){
+        return cpFill;
     }
 
     public void draw(){
@@ -110,6 +96,5 @@ public class MyRectangle extends MyShape{
 
         graphicsContext.fillRect(getX(), getY(), getWidth(), getHeight());
         graphicsContext.strokeRect(getX(), getY(), getWidth(), getHeight());
-
     }
 }
