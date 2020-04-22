@@ -18,7 +18,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Paint It!");
         primaryStage.getIcons().add(new Image("icon.jpg"));
-        primaryStage.setScene(new Scene(root, 1000, 1000));
+        primaryStage.setScene(new Scene(root, 1500, 1000));
         primaryStage.show();
     }
 

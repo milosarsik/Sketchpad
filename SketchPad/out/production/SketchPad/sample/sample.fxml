@@ -6,9 +6,9 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <MenuBar fx:id="menuBar" layoutY="1.0" prefHeight="26.0" prefWidth="1000.0">
+      <MenuBar fx:id="menuBar" layoutY="1.0" prefHeight="26.0" prefWidth="1500.0">
         <menus>
             <Menu mnemonicParsing="false" text="File">
               <items>
@@ -62,6 +62,6 @@
             </Menu>
         </menus>
       </MenuBar>
-      <Canvas fx:id="drawingCanvas" height="1000.0" layoutY="27.0" onMouseDragged="#drag" onMousePressed="#startDraw" onMouseReleased="#endDraw" width="1000.0" />
+      <Canvas fx:id="drawingCanvas" height="1000.0" layoutY="27.0" onMouseDragged="#drag" onMousePressed="#startDraw" onMouseReleased="#endDraw" width="1500.0" />
    </children>
 </AnchorPane>

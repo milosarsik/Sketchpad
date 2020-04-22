@@ -85,14 +85,25 @@ public class Controller {
                 "Paint It! gives you the option to choose a color for each " +
                 "individual shape that you draw. \n" +
                 "\n" +
-                "The program contains the following colors: \n" +
+                "The program contains the following colors to choose from: \n" +
                 "- Black \n" +
                 "- Blue \n" +
                 "- Red \n" +
                 "\n" +
-                "The program contains other functions such as: \n" +
-                "- Delete \n" +
+                "The program contains the following fill types for closed shapes: \n" +
+                "- Fill \n" +
+                "- Transparent \n" +
                 "\n" +
+                "The following selection methods are available in the program: \n" +
+                        "- Move the selected shape to a new location by clicking and dragging it to where you " +
+                        "what it to be moved to \n" +
+                        "- Delete the object from the canvas by simply clicking the object \n" +
+                        "- Copy and paste an object by clicking and dragging the shape where you want" +
+                        "to copy it to \n \n" +
+                        "" +
+                "The more advanced functions that are available are: \n" +
+                "- Undo and Redo \n" +
+                "- Save an image and load in an image \n" +
                 "");
 
         // Show the dialog
@@ -1238,7 +1249,7 @@ public class Controller {
 
         if (file != null) {
             try {
-                WritableImage writableImage = new WritableImage(1000, 1000);
+                WritableImage writableImage = new WritableImage(1500, 1000);
                 drawingCanvas.snapshot(null, writableImage);
                 RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
                 ImageIO.write(renderedImage, "png", file);
